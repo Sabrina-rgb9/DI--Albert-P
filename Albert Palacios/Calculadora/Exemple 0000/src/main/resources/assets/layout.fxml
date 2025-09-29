@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="12" style="-fx-padding: 24;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.Controller">
+<Text fx:id="display" 
+          text="0" 
+          style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #000000ff, #000000ff);" 
+          textAlignment="RIGHT">
+    </Text>    
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="buttonClear" onAction="#actionClear" style="-fx-background-color: #ff5252; -fx-text-fill: #fff; -fx-font-size: 18px;" text="C" />
+        <Button fx:id="buttonDivide" onAction="#actionDivide" style="-fx-background-color: #333; -fx-text-fill: #fff; -fx-font-size: 18px;" text="/" />
+        <Button fx:id="buttonMultiply" onAction="#actionMultiply" style="-fx-background-color: #333; -fx-text-fill: #fff; -fx-font-size: 18px;" text="*" />
+        <Button fx:id="buttonSubtract" onAction="#actionSubtract" style="-fx-background-color: #333; -fx-text-fill: #fff; -fx-font-size: 18px;" text="-" />
+    </HBox>
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="button7" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="7" />
+        <Button fx:id="button8" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="8" />
+        <Button fx:id="button9" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="9" />
+        <Button fx:id="buttonAdd" onAction="#actionAdd" style="-fx-background-color: #333; -fx-text-fill: #fff; -fx-font-size: 18px;" text="+" />
+    </HBox>
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="button4" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="4" />
+        <Button fx:id="button5" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="5" />
+        <Button fx:id="button6" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="6" />
+        <Button fx:id="buttonEquals" onAction="#actionEquals" style="-fx-background-color: green;" text="=" />
+    </HBox>
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="button1" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="1" />
+        <Button fx:id="button2" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="2" />
+        <Button fx:id="button3" onAction="#actionNumber" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="3" />
+      <Button style="-fx-background-color: #ffffff; -fx-text-fill: #fff; -fx-font-size: 18px;" textFill="WHITE" />
+    </HBox>
+    <HBox alignment="CENTER" spacing="10">
+        <Button fx:id="button0" onAction="#actionNumber" prefWidth="120" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="0" />
+        <Button fx:id="buttonDot" onAction="#actionDot" style="-fx-background-color: #444; -fx-text-fill: #fff; -fx-font-size: 18px;" text="." />
+    </HBox>
+</VBox>
