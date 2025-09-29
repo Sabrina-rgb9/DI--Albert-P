@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exercici0601.ControllerConsole">
+   <children>
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" maxHeight="50.0" minHeight="50.0" spacing="10.0" style="-fx-background-color: rgb(255,255,100);" VBox.vgrow="NEVER">
+               <children>
+                  <ImageView fx:id="imgArrowBack" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#toViewMain" pickOnBounds="true" preserveRatio="true" translateX="-65.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <Label maxHeight="50.0" text="Consola" translateX="-20.0" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox fx:id="list" alignment="TOP_CENTER" prefHeight="282.0" prefWidth="300.0">
+               <children>
+                  <Label fx:id="nom" prefHeight="45.0" prefWidth="273.0" text="NOM" textFill="#f50000" translateX="10.0" translateY="5.0">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <ImageView fx:id="image" fitHeight="161.0" fitWidth="233.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="282.0" spacing="10.0">
+               <children>
+                  <VBox alignment="TOP_RIGHT" prefHeight="88.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="date" prefHeight="29.0" prefWidth="183.0" text="Fecha" textFill="#0232f5">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="cpu" prefHeight="29.0" prefWidth="187.0" text="CPU" textFill="#2a00ff">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="units" prefHeight="29.0" prefWidth="186.0" text="Unidades" textFill="#0006ff">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Circle fx:id="circle" fill="DODGERBLUE" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

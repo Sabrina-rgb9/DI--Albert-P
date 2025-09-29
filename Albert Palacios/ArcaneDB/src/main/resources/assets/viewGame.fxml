@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exercici0601.ControllerGame">
+   <children>
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" maxHeight="50.0" minHeight="50.0" spacing="10.0" style="-fx-background-color: rgb(255,100,100);" VBox.vgrow="NEVER">
+               <children>
+                  <ImageView fx:id="imgArrowBack" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#toViewMain" pickOnBounds="true" preserveRatio="true" translateX="-80.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <Label maxHeight="50.0" text="Joc" translateX="-25.0" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox fx:id="list" alignment="TOP_CENTER">
+               <children>
+                  <Label fx:id="nom" prefHeight="45.0" prefWidth="273.0" text="NOM" textFill="RED" translateX="10.0" translateY="5.0">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <ImageView fx:id="image" fitHeight="171.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
+            <TextArea fx:id="plot" maxHeight="120.0" maxWidth="257.0" prefHeight="85.0" prefWidth="257.0" style="-fx-background-color: gray;" translateX="25.0" />
+            <Text fx:id="year" fill="#8a1086" strokeType="OUTSIDE" strokeWidth="0.0" text="Year" translateX="200.0" translateY="15.0" wrappingWidth="91.87200164794922">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Label fx:id="type" prefHeight="24.0" prefWidth="184.0" text="type" textFill="#3e00ff" translateX="10.0" translateY="-10.0">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
