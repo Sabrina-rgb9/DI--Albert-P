@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.project.Controller2"
+            prefWidth="800" prefHeight="600">
+    <children>
+        <VBox spacing="20" alignment="CENTER" layoutX="200" layoutY="200" prefWidth="400" prefHeight="200">
+            <TextField fx:id="msgText" editable="false" style="-fx-font-size: 16px; -fx-text-fill: #333;"/>
+            <Button fx:id="backB" text="Tornar" onAction="#animateToView1"/>
+        </VBox>
+    </children>
+</AnchorPane>
