@@ -9,6 +9,7 @@ public class Main extends Application {
 
     final int WIDOW_WIDTH = 800;
     final int WINDOW_HEIGHT = 600;
+    
     static String name;
     static int age;
 
