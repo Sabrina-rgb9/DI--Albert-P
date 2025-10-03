@@ -5,109 +5,136 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="460.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exercici0601.ControllerMain">
-   <children>
-      <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<BorderPane xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.exercici0601.ControllerMain"
+            prefHeight="460.0" prefWidth="360.0">
+
+   <!-- Barra superior -->
+   <top>
+      <HBox alignment="CENTER" maxHeight="50.0" minHeight="50.0" style="-fx-background-color: #CC0066;">
          <children>
-            <HBox alignment="CENTER" maxHeight="50.0" minHeight="50.0" style="-fx-background-color: rgb(150,190,100);" VBox.vgrow="NEVER">
-               <children>
-                  <Label maxHeight="50.0" text="Nintendo DB" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-            <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
-               <content>
-                  <VBox fx:id="list" alignment="TOP_CENTER" style="-fx-background-color: red;">
-                     <children>
-                        <AnchorPane maxHeight="50.0" onMouseClicked="#toViewCharacters" style="-fx-background-color: white; -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: grey;" VBox.vgrow="ALWAYS">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: rgb(100,200,200);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Label maxHeight="50.0" text="Personatges">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="15.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <ImageView fx:id="characterImage" fitHeight="75.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true">
-                                       <HBox.margin>
-                                          <Insets left="25.0" />
-                                       </HBox.margin>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </AnchorPane>
-                        <AnchorPane maxHeight="50.0" onMouseClicked="#toViewGames" style="-fx-background-color: white; -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: grey;" VBox.vgrow="ALWAYS">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: rgb(255,100,100);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Label maxHeight="50.0" text="Jocs">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="15.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <ImageView fx:id="gameImage" fitHeight="71.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
-                                       <HBox.margin>
-                                          <Insets left="100.0" />
-                                       </HBox.margin>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </AnchorPane>
-                        <AnchorPane maxHeight="50.0" onMouseClicked="#toViewConsoles" style="-fx-background-color: white; -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: grey;" VBox.vgrow="ALWAYS">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: rgb(255,255,100);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Label maxHeight="50.0" text="Consoles">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="15.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <ImageView fx:id="consoleImage" fitHeight="70.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
-                                       <HBox.margin>
-                                          <Insets left="55.0" />
-                                       </HBox.margin>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </AnchorPane>
-                        <ImageView fx:id="image" fitHeight="185.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" translateY="10.0" />
-                     </children>
-                  </VBox>
-               </content>
-            </ScrollPane>
+            <Label text="Arcane DB" maxHeight="50.0" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="Noto Kufi Arabic Bold" size="24.0" />
+               </font>
+            </Label>
          </children>
-      </VBox>
-   </children>
-</AnchorPane>
+      </HBox>
+   </top>
+
+   <!-- Lista de opciones (móvil: arriba / escritorio: izquierda) -->
+   <top>
+      <ScrollPane fx:id="scrollList" fitToWidth="true" fitToHeight="true">
+         <content>
+            <VBox fx:id="list" alignment="TOP_CENTER" style="-fx-background-color: #CC0066;">
+               <children>
+                  <!-- Personatges -->
+                  <AnchorPane maxHeight="50.0" onMouseClicked="#toViewCharacters"
+                              style="-fx-background-color: white; -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: grey;"
+                              VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0"
+                              style="-fx-background-color: #0066cc;"
+                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label maxHeight="50.0" text="Personatges">
+                                 <font>
+                                    <Font name="Noto Naskh Arabic Bold" size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="15.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ImageView fx:id="characterImage" fitHeight="75.0" fitWidth="87.0"
+                                         pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+
+                  <!-- Jocs -->
+                  <AnchorPane maxHeight="50.0" onMouseClicked="#toViewGames"
+                              style="-fx-background-color: white; -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: grey;"
+                              VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0"
+                              style="-fx-background-color: #0080FF;"
+                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label maxHeight="50.0" text="Jocs">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="15.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ImageView fx:id="gameImage" fitHeight="71.0" fitWidth="82.0"
+                                         pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets left="100.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+
+                  <!-- Consoles -->
+                  <AnchorPane maxHeight="50.0" onMouseClicked="#toViewConsoles"
+                              style="-fx-background-color: white; -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: grey;"
+                              VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0"
+                              style="-fx-background-color: #0066cc;"
+                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label maxHeight="50.0" text="Consoles">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="15.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ImageView fx:id="consoleImage" fitHeight="70.0" fitWidth="86.0"
+                                         pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets left="55.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </top>
+
+   <!-- Contenido central -->
+   <center>
+      <ImageView fx:id="image" fitHeight="185.0" fitWidth="300.0" preserveRatio="true" translateY="10.0" />
+   </center>
+</BorderPane>

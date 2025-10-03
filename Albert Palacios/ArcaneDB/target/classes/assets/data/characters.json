@@ -1,86 +1,86 @@
 [
     {
-        "name": "Vi",
-        "image": "character_vi.png",
-        "color": "pink",
-        "origin": "Zaun"
-    },
-    {
-        "name": "Jinx",
-        "image": "character_jinx.png",
-        "color": "blue",
-        "origin": "Zaun"
-    },
-    {
-        "name": "Jayce",
-        "image": "character_jayce.png",
-        "color": "gold",
-        "origin": "Piltover"
-    },
-    {
-        "name": "Viktor",
-        "image": "character_viktor.png",
-        "color": "silver",
-        "origin": "Zaun"
-    },
-    {
-        "name": "Caitlyn",
-        "image": "character_caitlyn.png",
-        "color": "purple",
-        "origin": "Piltover"
-    },
-    {
-        "name": "Ekko",
-        "image": "character_ekko.png",
-        "color": "white",
-        "origin": "Zaun"
-    },
-    {
-        "name": "Silco",
-        "image": "character_silco.png",
-        "color": "black",
-        "origin": "Zaun"
-    },
-    {
-        "name": "Mel Medarda",
-        "image": "character_mel.png",
-        "color": "gold",
-        "origin": "Noxus"
-    },
-    {
-        "name": "Vander",
-        "image": "character_vander.png",
-        "color": "brown",
-        "origin": "Zaun"
-    },
-    {
-        "name": "Heimerdinger",
-        "image": "character_heimerdinger.png",
-        "color": "yellow",
-        "origin": "Piltover"
-    },
-    {
-        "name": "Sevika",
-        "image": "character_sevika.png",
+        "name": "Mario",
+        "image": "character_mario.png",
         "color": "red",
-        "origin": "Zaun"
+        "game": "Super Mario Bros"
     },
     {
-        "name": "Singed",
-        "image": "character_singed.png",
+        "name": "Luigi",
+        "image": "character_luigi.png",
         "color": "green",
-        "origin": "Zaun"
+        "game": "Luigi's Mansion"
     },
     {
-        "name": "Marcus",
-        "image": "character_marcus.png",
+        "name": "Peach",
+        "image": "character_peach.png",
+        "color": "pink",
+        "game": "Super Mario Party"
+    },
+    {
+        "name": "Inkling",
+        "image": "character_inkling.png",
+        "color": "orange",
+        "game": "Splatoon"
+    },
+    {
+        "name": "Link",
+        "image": "character_link.png",
+        "color": "green",
+        "game": "The Legend of Zelda"
+    },
+    {
+        "name": "Samus Aran",
+        "image": "character_samus.png",
+        "color": "orange",
+        "game": "Metroid"
+    },
+    {
+        "name": "Donkey Kong",
+        "image": "character_dk.png",
+        "color": "brown",
+        "game": "Donkey Kong"
+    },
+    {
+        "name": "Pikachu",
+        "image": "character_pikachu.png",
+        "color": "yellow",
+        "game": "Pokémon"
+    },
+    {
+        "name": "Bowser",
+        "image": "character_bowser.png",
+        "color": "yellow",
+        "game": "Super Mario Bros"
+    },
+    {
+        "name": "Fox",
+        "image": "character_fox.png",
+        "color": "brown",
+        "game": "Pokémon"
+    },
+    {
+        "name": "Pikachu",
+        "image": "character_pikachu.png",
+        "color": "brown",
+        "game": "Metroid"
+    },
+    {
+        "name": "Kirby",
+        "image": "character_kirby.png",
+        "color": "pink",
+        "game": "Kirby"
+    },
+    {
+        "name": "Olimar",
+        "image": "character_olimar.png",
         "color": "grey",
-        "origin": "Piltover"
+        "game": "Pikmin"
     },
     {
-        "name": "Ambessa Medarda",
-        "image": "character_ambessa.png",
-        "color": "darkred",
-        "origin": "Noxus"
+        "name": "Wario",
+        "image": "character_wario.png",
+        "color": "grey",
+        "game": "Super Mario Kart"
     }
 ]
