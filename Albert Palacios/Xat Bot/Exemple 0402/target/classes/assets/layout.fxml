@@ -1,45 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.ChatController">
-    <top>
-        <VBox spacing="6" padding="10">
-            <HBox spacing="6">
-                <Button fx:id="btnTextRequest" text="Send Text" onAction="#onSendText"/>
-                <TextField fx:id="textInput" promptText="Write your question..." HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnStop" text="Stop" onAction="#onStop" />
-            </HBox>
-            <HBox spacing="6">
-                <Button fx:id="btnPickImage" text="Choose Image..." onAction="#onPickImage"/>
-                <Label fx:id="lblImageName" text="No image selected" />
-                <ChoiceBox fx:id="choiceImageQuestion">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Describe this image"/>
-                            <String fx:value="How many cats are there in this image?"/>
-                            <String fx:value="What objects are visible?"/>
-                        </FXCollections>
-                    </items>
-                </ChoiceBox>
-                <Button fx:id="btnSendImage" text="Send Image" onAction="#onSendImage"/>
-            </HBox>
-        </VBox>
-    </top>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.project.ChatController"
+            style="-fx-background-color: #F2F2F2;">
 
+    <!-- CENTRO: Chat -->
     <center>
-        <VBox padding="10" spacing="6">
-            <Label text="Conversation"/>
-            <TextArea fx:id="textArea" editable="false" wrapText="true" prefHeight="400"/>
-        </VBox>
+        <ScrollPane fx:id="chatScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background: transparent; -fx-background-color: transparent;">
+            <content>
+                <VBox fx:id="chatBox" spacing="8">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
     </center>
 
+    <!-- ABAJO: Entrada y botones -->
     <bottom>
-        <HBox padding="10" spacing="10">
-            <ProgressIndicator fx:id="progress" visible="false"/>
-            <Label fx:id="status" text="Idle"/>
-        </HBox>
+        <VBox spacing="10" style="-fx-background-color: #FFFFFF; -fx-padding: 10 15 10 15; -fx-border-color: #E0E0E0; -fx-border-width: 1 0 0 0;">
+            <!-- Entrada de texto y botones -->
+            <HBox spacing="8">
+                <TextField fx:id="textInput" promptText="Escribe tu mensaje..."
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-padding: 8 12 8 12; -fx-font-size: 14px;"/>
+                <Button fx:id="btnTextRequest" text="Enviar Texto" onAction="#onSendText"
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                <Button fx:id="btnPickImage" text="Imagen" onAction="#onPickImage"
+                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                <Button fx:id="btnSendImage" text="Enviar" onAction="#onSendImage"
+                        style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                <Button fx:id="btnStop" text="Cancelar" onAction="#onStop"
+                        style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-background-radius: 20;"/>
+            </HBox>
+
+            <!-- Estado e imagen -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label fx:id="lblImageName" text="No hay imagen seleccionada" style="-fx-text-fill: #555555;"/>
+                <ProgressIndicator fx:id="progress" visible="false" prefWidth="25" prefHeight="25"/>
+                <Label fx:id="status" style="-fx-text-fill: #777777;"/>
+            </HBox>
+        </VBox>
     </bottom>
+
 </BorderPane>

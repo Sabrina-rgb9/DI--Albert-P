@@ -2,11 +2,16 @@ package com.project;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
@@ -18,14 +23,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ChatController {
 
     @FXML private TextField textInput;
-    @FXML private TextArea textArea;
+    @FXML private VBox chatBox;
+    @FXML private ScrollPane chatScroll;
     @FXML private Button btnTextRequest;
     @FXML private Button btnPickImage;
     @FXML private Button btnSendImage;
     @FXML private Button btnStop;
-    @FXML private Label status;
     @FXML private Label lblImageName;
-    @FXML private ChoiceBox<String> choiceImageQuestion;
+    @FXML private Label status;
     @FXML private ProgressIndicator progress;
 
     private final HttpClient httpClient = HttpClient.newBuilder()
@@ -33,12 +38,9 @@ public class ChatController {
             .build();
 
     private CompletableFuture<?> currentRequestFuture;
-    private InputStream currentInputStream;
     private final AtomicBoolean isCancelled = new AtomicBoolean(false);
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private File selectedImage;
-
     private final String OLLAMA_URL = "http://localhost:11434/api/generate";
 
     @FXML
@@ -48,22 +50,23 @@ public class ChatController {
         progress.setVisible(false);
     }
 
+    // ------------------ Envío de texto ------------------
     @FXML
     private void onSendText() {
         String prompt = textInput.getText();
         if (prompt == null || prompt.isBlank()) return;
 
-        appendToChat("> " + prompt + "\n");
+        appendToChat(prompt, true);
         textInput.clear();
 
-        startStreamingTextRequest(prompt);
+        startTextRequest(prompt);
     }
 
-    private void startStreamingTextRequest(String prompt) {
+    private void startTextRequest(String prompt) {
         JSONObject payload = new JSONObject();
         payload.put("model", "gemma3:1b");
         payload.put("prompt", prompt);
-        payload.put("stream", true);
+        payload.put("stream", false); // texto completo
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(OLLAMA_URL))
@@ -72,52 +75,41 @@ public class ChatController {
                 .build();
 
         cancelCurrentRequest();
-
         isCancelled.set(false);
-        setUiBusy("Streaming...");
+        setUiBusy("Procesando texto...");
 
-        currentRequestFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
-                .thenAcceptAsync(response -> {
-                    currentInputStream = response.body();
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(currentInputStream))) {
-                        String line;
-                        while ((line = reader.readLine()) != null && !isCancelled.get()) {
-                            line = line.trim();
-                            if (line.isEmpty()) continue;
-                            try {
-                                JSONObject obj = new JSONObject(line);
-                                String responseText = obj.optString("response", "");
-                                if (!responseText.isEmpty()) {
-                                    Platform.runLater(() -> appendToChat(responseText));
-                                }
-                            } catch (Exception e) {
-                                Platform.runLater(() -> appendToChat(line));
-                            }
+        currentRequestFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(body -> {
+                    if (!isCancelled.get()) {
+                        try {
+                            JSONObject obj = new JSONObject(body);
+                            String responseText = obj.optString("response", body);
+                            appendToChat(responseText, false);
+                        } catch (Exception e) {
+                            appendToChat("[Error al procesar respuesta de texto]", false);
                         }
-                    } catch (IOException e) {
-                        if (!isCancelled.get()) e.printStackTrace();
-                    } finally {
-                        cleanupAfterRequest();
                     }
-                }, executor)
+                    cleanupAfterRequest();
+                })
                 .exceptionally(e -> {
                     if (!isCancelled.get()) {
-                        e.printStackTrace();
-                        Platform.runLater(() -> appendToChat("\n[Error during streaming]\n"));
+                        appendToChat("[Error durante la petición de texto]", false);
                     }
                     cleanupAfterRequest();
                     return null;
                 });
     }
 
+    // ------------------ Selección de imagen ------------------
     @FXML
     private void onPickImage() {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choose an image");
+        chooser.setTitle("Elegir imagen");
         chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Images", "*.png","*.jpg","*.jpeg","*.bmp","*.gif")
+                new FileChooser.ExtensionFilter("Imágenes", "*.png","*.jpg","*.jpeg","*.bmp","*.gif")
         );
-        File file = chooser.showOpenDialog(textArea.getScene().getWindow());
+        File file = chooser.showOpenDialog(chatScroll.getScene().getWindow());
         if (file != null) {
             selectedImage = file;
             lblImageName.setText(file.getName());
@@ -127,17 +119,20 @@ public class ChatController {
     @FXML
     private void onSendImage() {
         if (selectedImage == null) {
-            appendToChat("[No image selected]\n");
+            appendToChat("[No hay imagen seleccionada]", false);
             return;
         }
-        String question = choiceImageQuestion.getValue();
-        if (question == null || question.isBlank()) question = "Describe this image";
 
-        appendToChat("> " + question + " (image: " + selectedImage.getName() + ")\n");
-        startImageRequest(selectedImage, question);
+        String prompt = textInput.getText();
+        if (prompt == null || prompt.isBlank()) prompt = "Describe esta imagen";
+
+        appendToChat(prompt + " (imagen: " + selectedImage.getName() + ")", true);
+        textInput.clear();
+
+        startImageRequest(selectedImage, prompt);
     }
 
-    private void startImageRequest(File imageFile, String question) {
+    private void startImageRequest(File imageFile, String prompt) {
         try {
             byte[] bytes = Files.readAllBytes(imageFile.toPath());
             String base64 = Base64.getEncoder().encodeToString(bytes);
@@ -147,8 +142,8 @@ public class ChatController {
 
             JSONObject payload = new JSONObject();
             payload.put("model", "gemma3:1b");
-            payload.put("stream", false);
-            payload.put("prompt", question + "\n\n[IMAGE]\n" + dataUri);
+            payload.put("stream", false); // respuesta completa
+            payload.put("prompt", prompt + "\n\n[IMAGE]\n" + dataUri);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(OLLAMA_URL))
@@ -158,7 +153,7 @@ public class ChatController {
 
             cancelCurrentRequest();
             isCancelled.set(false);
-            setUiBusy("Thinking (image)...");
+            setUiBusy("Procesando imagen...");
 
             currentRequestFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
@@ -167,30 +162,31 @@ public class ChatController {
                             try {
                                 JSONObject obj = new JSONObject(body);
                                 String responseText = obj.optString("response", body);
-                                Platform.runLater(() -> appendToChat("\n" + responseText + "\n"));
+                                appendToChat(responseText, false);
                             } catch (Exception e) {
-                                Platform.runLater(() -> appendToChat("\n[Error parsing image response]\n"));
+                                appendToChat("[Error al procesar respuesta de imagen]", false);
                             }
                         }
                         cleanupAfterRequest();
                     })
                     .exceptionally(e -> {
                         if (!isCancelled.get()) {
-                            Platform.runLater(() -> appendToChat("\n[Error during image request]\n"));
+                            appendToChat("[Error durante petición de imagen]", false);
                         }
                         cleanupAfterRequest();
                         return null;
                     });
 
         } catch (IOException e) {
-            appendToChat("[Failed to read image]\n");
+            appendToChat("[No se pudo leer la imagen]", false);
         }
     }
 
+    // ------------------ Cancelación ------------------
     @FXML
     private void onStop() {
         cancelCurrentRequest();
-        appendToChat("\n[User cancelled]\n");
+        appendToChat("[Usuario canceló la petición]", false);
     }
 
     private void cancelCurrentRequest() {
@@ -198,13 +194,10 @@ public class ChatController {
         if (currentRequestFuture != null && !currentRequestFuture.isDone()) {
             currentRequestFuture.cancel(true);
         }
-        if (currentInputStream != null) {
-            try { currentInputStream.close(); } catch (IOException ignored) {}
-            currentInputStream = null;
-        }
         cleanupAfterRequest();
     }
 
+    // ------------------ UI Helpers ------------------
     private void setUiBusy(String msg) {
         Platform.runLater(() -> {
             btnStop.setDisable(false);
@@ -227,7 +220,33 @@ public class ChatController {
         });
     }
 
-    private void appendToChat(String text) {
-        textArea.appendText(text);
+    // ------------------ Chat Bubbles ------------------
+    private void appendToChat(String text, boolean isUser) {
+        Platform.runLater(() -> {
+            Label label = new Label(text);
+            label.setWrapText(true);
+            label.setPadding(new Insets(5,10,5,10));
+
+            if(isUser) {
+                label.setStyle("-fx-background-color: #DCF8C6; -fx-background-radius: 10; -fx-text-fill: black;");
+            } else {
+                label.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-text-fill: black;");
+            }
+
+            HBox hbox = new HBox();
+            if(isUser) {
+                hbox.setAlignment(Pos.CENTER_RIGHT);
+                hbox.getChildren().add(label);
+            } else {
+                hbox.setAlignment(Pos.CENTER_LEFT);
+                hbox.getChildren().add(label);
+            }
+
+            chatBox.getChildren().add(hbox);
+
+            // Auto-scroll
+            chatScroll.layout();
+            chatScroll.setVvalue(1.0);
+        });
     }
 }
