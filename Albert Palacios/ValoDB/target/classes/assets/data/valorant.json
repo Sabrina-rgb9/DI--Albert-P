@@ -1,0 +1,162 @@
+[
+  {
+    "number": 1,
+    "name": "Jett",
+    "type": "Duelista",
+    "ability": "Updraft",
+    "height": "1.65 m",
+    "weight": "54 kg",
+    "category": "Wind",
+    "image": "data/valorant/agents/jett.png"
+  },
+  {
+    "number": 2,
+    "name": "Phoenix",
+    "type": "Duelista",
+    "ability": "Blaze",
+    "height": "1.80 m",
+    "weight": "78 kg",
+    "category": "Fire",
+    "image": "data/valorant/agents/phoenix.png"
+  },
+  {
+    "number": 3,
+    "name": "Viper",
+    "type": "Controller",
+    "ability": "Toxic Screen",
+    "height": "1.75 m",
+    "weight": "68 kg",
+    "category": "Poison",
+    "image": "data/valorant/agents/viper.png"
+  },
+  {
+    "number": 4,
+    "name": "Sova",
+    "type": "Initiator",
+    "ability": "Recon Bolt",
+    "height": "1.88 m",
+    "weight": "82 kg",
+    "category": "Archer",
+    "image": "data/valorant/agents/sova.png"
+  },
+  {
+    "number": 5,
+    "name": "Sage",
+    "type": "Sentinel",
+    "ability": "Healing Orb",
+    "height": "1.70 m",
+    "weight": "60 kg",
+    "category": "Healer",
+    "image": "data/valorant/agents/sage.png"
+  },
+  {
+    "number": 6,
+    "name": "Brimstone",
+    "type": "Controller",
+    "ability": "Orbital Strike",
+    "height": "1.90 m",
+    "weight": "90 kg",
+    "category": "Tactician",
+    "image": "data/valorant/agents/brimstone.png"
+  },
+  {
+    "number": 7,
+    "name": "Omen",
+    "type": "Controller",
+    "ability": "From the Shadows",
+    "height": "1.85 m",
+    "weight": "75 kg",
+    "category": "Shadow",
+    "image": "data/valorant/agents/omen.png"
+  },
+  {
+    "number": 8,
+    "name": "Raze",
+    "type": "Duelista",
+    "ability": "Boom Bot",
+    "height": "1.68 m",
+    "weight": "59 kg",
+    "category": "Explosives",
+    "image": "data/valorant/agents/raze.png"
+  },
+  {
+    "number": 9,
+    "name": "Cypher",
+    "type": "Sentinel",
+    "ability": "Trapwire",
+    "height": "1.77 m",
+    "weight": "70 kg",
+    "category": "Spy",
+    "image": "data/valorant/agents/cypher.png"
+  },
+  {
+    "number": 10,
+    "name": "Breach",
+    "type": "Initiator",
+    "ability": "Flashpoint",
+    "height": "1.83 m",
+    "weight": "85 kg",
+    "category": "Shock",
+    "image": "data/valorant/agents/breach.png"
+  },
+  {
+    "number": 11,
+    "name": "Reyna",
+    "type": "Duelista",
+    "ability": "Devour",
+    "height": "1.72 m",
+    "weight": "62 kg",
+    "category": "Soul",
+    "image": "data/valorant/agents/reyna.png"
+  },
+  {
+    "number": 12,
+    "name": "Killjoy",
+    "type": "Sentinel",
+    "ability": "Nanoswarm",
+    "height": "1.65 m",
+    "weight": "58 kg",
+    "category": "Tech",
+    "image": "data/valorant/agents/killjoy.png"
+  },
+  {
+    "number": 13,
+    "name": "Skye",
+    "type": "Initiator",
+    "ability": "Trailblazer",
+    "height": "1.74 m",
+    "weight": "64 kg",
+    "category": "Nature",
+    "image": "data/valorant/agents/skye.png"
+  },
+  {
+    "number": 14,
+    "name": "Yoru",
+    "type": "Duelista",
+    "ability": "Dimensional Drift",
+    "height": "1.80 m",
+    "weight": "72 kg",
+    "category": "Dimension",
+    "image": "data/valorant/agents/yoru.png"
+  },
+  {
+    "number": 15,
+    "name": "Astra",
+    "type": "Controller",
+    "ability": "Astral Form",
+    "height": "1.78 m",
+    "weight": "66 kg",
+    "category": "Cosmos",
+    "image": "data/valorant/agents/astra.png"
+  },
+  {
+    "number": 25,
+    "name": "Neon",
+    "type": "Duelista",
+    "ability": "High Gear",
+    "height": "1.67 m",
+    "weight": "57 kg",
+    "category": "Speed",
+    "image": "data/valorant/agents/neon.png"
+  }
+]

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="460.0" prefWidth="360.0"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.exercici0601.ControllerCharacter">
+    <children>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0">
+                    <children>
+                        <ImageView fx:id="imgArrowBack" fitHeight="25.0" fitWidth="25.0"
+                                   onMouseClicked="#toViewMain" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <HBox.margin>
+                                <Insets left="15.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <Label text="Personatge" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <VBox alignment="TOP_CENTER" spacing="10" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="nom" text="NOM">
+                            <font>
+                                <Font size="28.0" />
+                            </font>
+                        </Label>
+                        <Circle fx:id="circle" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+                        <ImageView fx:id="image" fitHeight="200.0" fitWidth="200.0"
+                                   pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="game" text="Rol: ..." />
+                    </children>
+                    <padding>
+                        <Insets top="20.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
