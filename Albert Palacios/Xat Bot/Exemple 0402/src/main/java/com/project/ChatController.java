@@ -192,7 +192,7 @@ public class ChatController {
 
     /**
      * Abre un selector de archivos para que el usuario elija una imagen.
-     * Solo permite formatos de imagen comunes.
+     * Solo permite formatos de imagen png.
      */
     @FXML
     private void onPickImage() {
@@ -210,7 +210,7 @@ public class ChatController {
 
     /**
      * Envía la imagen seleccionada junto con un prompt al modelo multimodal.
-     * Si no hay prompt, usa uno por defecto ("Describe this image").
+     * Si no hay prompt, usa uno por defecto ("Describe esta imagen").
      */
     @FXML
     private void onSendImage() {
@@ -220,7 +220,7 @@ public class ChatController {
         }
 
         String prompt = textInput.getText();
-        if (prompt == null || prompt.isBlank()) prompt = "Describe this image";
+        if (prompt == null || prompt.isBlank()) prompt = "Describe esta imagen";
 
         // Muestra el mensaje del usuario con info de la imagen
         appendToChat(prompt + " (imatge: " + selectedImage.getName() + ")", true);
@@ -229,15 +229,6 @@ public class ChatController {
         startImageCompleteRequest(selectedImage, prompt);
     }
 
-    /**
-     * Envía una petición con imagen a Ollama usando el modelo 'llava-phi3'.
-     * 
-     * IMPORTANTE:
-     * - NO usa streaming (stream: false), como exige el enunciado.
-     * - La imagen se convierte a Base64 PURO (sin prefijo "data:image/...").
-     * - Se envía dentro del campo "images" como un array JSON.
-     * - Muestra "Thinking..." mientras espera.
-     */
     private void startImageCompleteRequest(File imageFile, String prompt) {
         try {
             // Lee la imagen y la convierte a Base64
