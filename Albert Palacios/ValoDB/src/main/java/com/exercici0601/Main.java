@@ -23,10 +23,10 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
-        UtilsViews.addView(getClass(), "ViewCharacters", "/assets/viewCharacters.fxml");
-        UtilsViews.addView(getClass(), "ViewCharacter", "/assets/viewCharacter.fxml");
-        UtilsViews.addView(getClass(), "SubviewCharacter", "/assets/subviewCharacters.fxml"); // opcional, però bo
-        UtilsViews.addView(getClass(), "ViewMain", "/assets/viewMain.fxml");
+        UtilsViews.addView(getClass(), "ViewCharacters", "src/main/resources/assets/viewCharacters.fxml");
+        UtilsViews.addView(getClass(), "ViewCharacter", "src/main/resources/assets/viewCharacter.fxml");
+        UtilsViews.addView(getClass(), "SubviewCharacter", "src/main/resources/assets/subviewCharacters.fxml"); // opcional, però bo
+        UtilsViews.addView(getClass(), "ViewMain", "src/main/resources/assets/viewMain.fxml");
 
         UtilsViews.setView("viewMain");
         Scene scene = new Scene(UtilsViews.parentContainer);

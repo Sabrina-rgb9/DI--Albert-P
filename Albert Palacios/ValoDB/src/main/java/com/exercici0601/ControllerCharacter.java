@@ -1,4 +1,3 @@
-// src/main/java/com/exercici0601/ControllerCharacter.java
 package com.exercici0601;
 
 import com.utils.UtilsViews;
