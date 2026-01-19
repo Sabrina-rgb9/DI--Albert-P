@@ -1,2 +1,6 @@
+com/project/service/OllamaHttpClient.class
 com/project/Main.class
 com/project/ChatController.class
+com/project/service/OllamaClient.class
+com/project/model/ChatMessage.class
+com/project/ui/ChatCell.class

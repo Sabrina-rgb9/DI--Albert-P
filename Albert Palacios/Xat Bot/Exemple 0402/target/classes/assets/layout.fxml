@@ -13,16 +13,11 @@
 
     <!-- CENTRO: Chat -->
     <center>
-        <ScrollPane fx:id="chatScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                    style="-fx-background: transparent; -fx-background-color: transparent;">
-            <content>
-                <VBox fx:id="chatBox" spacing="8">
-                    <padding>
-                        <Insets top="15" right="15" bottom="15" left="15"/>
-                    </padding>
-                </VBox>
-            </content>
-        </ScrollPane>
+        <ListView fx:id="chatList" focusTraversable="false" style="-fx-background-color: transparent;" prefHeight="400" >
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+        </ListView>
     </center>
 
     <!-- ABAJO: Entrada y botones -->
