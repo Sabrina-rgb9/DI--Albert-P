@@ -1,4 +1,5 @@
 import 'package:buscaMinas/buscaMinas.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Buscamines Game Logic', () {
