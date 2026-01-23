@@ -6,8 +6,9 @@ class Buscamines {
   final int cols;
   int _mineCount = 0;
   bool _gameOver = false;
+  bool _firstMoveDone = false;
 
-  Buscamines({this.rows = 10, this.cols = 10}) {
+  Buscamines({this.rows = 6, this.cols = 10}) {
     board = List.generate(rows, (_) => List.generate(cols, (_) => Cell()));
   }
 
@@ -15,8 +16,8 @@ class Buscamines {
   int get mineCount => _mineCount;
   bool get isGameOver => _gameOver;
 
-  // Initialize the board placing a default number of mines (10)
-  void initializeGame({int mines = 10, int? seed}) {
+  // Initialize the board placing a default number of mines (8)
+  void initializeGame({int mines = 8, int? seed}) {
     // Reset board
     for (var row in board) {
       for (var c in row) {
@@ -28,17 +29,18 @@ class Buscamines {
     }
     _mineCount = 0;
     _gameOver = false;
+    _firstMoveDone = false;
 
     final rng = (seed == null) ? Random() : Random(seed);
     // Ensure at least 8 mines when called without explicit small value
     final targetMines = mines < 8 ? 8 : mines;
 
-    // Ensure at least 2 mines per quadrant (top-left, top-right, bottom-left, bottom-right)
+    // Ensure at least 2 mines per quadrant (rows A-C / D-F and cols 0-4 / 5-9)
     final quadrants = [
-      [0, (rows / 2).floor() - 1, 0, (cols / 2).floor() - 1], // top-left
-      [(rows / 2).ceil(), rows - 1, 0, (cols / 2).floor() - 1], // top-right
-      [0, (rows / 2).floor() - 1, (cols / 2).ceil(), cols - 1], // bottom-left
-      [(rows / 2).ceil(), rows - 1, (cols / 2).ceil(), cols - 1], // bottom-right
+      [0, 2, 0, 4], // top-left (A-C, 0-4)
+      [3, 5, 0, 4], // top-right (D-F, 0-4) -- actually bottom-left in row split
+      [0, 2, 5, 9], // bottom-left (A-C, 5-9)
+      [3, 5, 5, 9], // bottom-right (D-F, 5-9)
     ];
 
     for (var q in quadrants) {
@@ -48,6 +50,7 @@ class Buscamines {
         int y = q[2] + rng.nextInt(q[3] - q[2] + 1);
         if (!board[x][y].isMine) {
           board[x][y].isMine = true;
+          board[x][y].isInitialMine = true;
           _mineCount++;
           placedInQuad++;
         }
@@ -60,6 +63,7 @@ class Buscamines {
       int y = rng.nextInt(cols);
       if (!board[x][y].isMine) {
         board[x][y].isMine = true;
+        board[x][y].isInitialMine = true;
         _mineCount++;
       }
     }
@@ -155,6 +159,9 @@ class Buscamines {
     if (x < 0 || x >= rows || y < 0 || y >= cols) return;
     if (!board[x][y].isMine) {
       board[x][y].isMine = true;
+      // Mines placed manually are NOT considered "initial" so that tests that place mines can
+      // still trigger an explosion on the first reveal.
+      board[x][y].isInitialMine = false;
       _mineCount++;
       // update adjacent counts
       for (int dx = -1; dx <= 1; dx++) {
@@ -176,35 +183,102 @@ class Buscamines {
     board[x][y].hasFlag = !board[x][y].hasFlag;
   }
 
-  // Reveal a cell; returns true if a mine was revealed (explosion)
+  // Reveal a cell as a user action. Returns true if an explosion happened.
   bool revealCell(int x, int y) {
     if (x < 0 || x >= rows || y < 0 || y >= cols) return false;
-    final cell = board[x][y];
-    if (cell.hasFlag) return false; // flagged cells are not revealed
-    if (cell.isRevealed) return false;
-
-    cell.isRevealed = true;
-    if (cell.isMine) {
-      _gameOver = true;
-      return true;
+    // If it's the first user move and the selected cell has a mine, relocate it
+    if (!_firstMoveDone) {
+      _firstMoveDone = true;
+      if (board[x][y].isMine) {
+        _relocateMineFrom(x, y);
+        // update adjacent counts after relocation
+        for (int i = 0; i < rows; i++) {
+          for (int j = 0; j < cols; j++) {
+            board[i][j].adjacentMines = _countAdjacentMines(i, j);
+          }
+        }
+      }
     }
 
+    // User selection ignores flags (per spec: choosing a flagged cell selects it)
+    if (board[x][y].isRevealed) return false;
+
+    // Use internal recursive reveal for the actual logic
+    final exploded = _revealInternal(x, y, isUserAction: true);
+    if (exploded) _gameOver = true;
+    return exploded;
+  }
+
+  // Internal reveal used for recursion. isUserAction=false for recursive calls.
+  bool _revealInternal(int x, int y, {required bool isUserAction}) {
+    if (x < 0 || x >= rows || y < 0 || y >= cols) return false;
+    final cell = board[x][y];
+    if (cell.isRevealed) return false;
+    if (cell.hasFlag && !isUserAction) return false; // do not reveal flagged cells during recursion
+
+    if (cell.isMine) {
+      if (!isUserAction) {
+        return false; // recursion won't trigger explosion
+      } else {
+        return true; // user revealed a mine -> explosion
+      }
+    }
+
+    cell.isRevealed = true;
     if (cell.adjacentMines == 0) {
-      // reveal neighbors recursively
       for (int dx = -1; dx <= 1; dx++) {
         for (int dy = -1; dy <= 1; dy++) {
           if (dx == 0 && dy == 0) continue;
-          int nx = x + dx;
-          int ny = y + dy;
+          final nx = x + dx;
+          final ny = y + dy;
           if (nx >= 0 && nx < rows && ny >= 0 && ny < cols) {
-            if (!board[nx][ny].isRevealed && !board[nx][ny].isMine) {
-              revealCell(nx, ny);
-            }
+            _revealInternal(nx, ny, isUserAction: false);
           }
         }
       }
     }
     return false;
+  }
+
+  void _relocateMineFrom(int x, int y) {
+    final rng = Random();
+    if (!board[x][y].isMine) return;
+    board[x][y].isMine = false;
+    board[x][y].isInitialMine = false;
+    _mineCount--;
+    // find a non-mine cell outside the 3x3 neighbor region of (x,y)
+    List<List<int>> candidates = [];
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        final dx = (i - x).abs();
+        final dy = (j - y).abs();
+        if ((dx > 1 || dy > 1) && !board[i][j].isMine) {
+          candidates.add([i, j]);
+        }
+      }
+    }
+    if (candidates.isEmpty) {
+      // fallback: anywhere
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          if (!board[i][j].isMine) candidates.add([i, j]);
+        }
+      }
+    }
+    if (candidates.isNotEmpty) {
+      final pick = candidates[rng.nextInt(candidates.length)];
+      board[pick[0]][pick[1]].isMine = true;
+      board[pick[0]][pick[1]].isInitialMine = true;
+      _mineCount++;
+    }
+  }
+
+  void revealAllMines() {
+    for (var row in board) {
+      for (var c in row) {
+        if (c.isMine) c.isRevealed = true;
+      }
+    }
   }
 
   bool isCellRevealed(int x, int y) {

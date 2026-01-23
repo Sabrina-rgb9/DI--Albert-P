@@ -14,11 +14,11 @@ void main() {
       expect(game.mineCount, greaterThanOrEqualTo(8));
     });
 
-    test('should have at least 2 mines in each quadrant', () {
-      int topLeftMines = game.countMinesInQuadrant(0, 4, 0, 4);
-      int topRightMines = game.countMinesInQuadrant(5, 9, 0, 4);
-      int bottomLeftMines = game.countMinesInQuadrant(0, 4, 5, 9);
-      int bottomRightMines = game.countMinesInQuadrant(5, 9, 5, 9);
+    test('should have at least 2 mines in each quadrant (A-C/D-F x 0-4/5-9)', () {
+      int topLeftMines = game.countMinesInQuadrant(0, 2, 0, 4);
+      int topRightMines = game.countMinesInQuadrant(3, 5, 0, 4);
+      int bottomLeftMines = game.countMinesInQuadrant(0, 2, 5, 9);
+      int bottomRightMines = game.countMinesInQuadrant(3, 5, 5, 9);
 
       expect(topLeftMines, greaterThanOrEqualTo(2));
       expect(topRightMines, greaterThanOrEqualTo(2));
@@ -33,10 +33,10 @@ void main() {
       expect(game.isCellRevealed(1, 1), isTrue);
     });
 
-    test('should not reveal cells with flags', () {
+    test('selecting a flagged cell should still select it (user action)', () {
       game.placeFlag(1, 1);
       game.revealCell(1, 1);
-      expect(game.isCellRevealed(1, 1), isFalse);
+      expect(game.isCellRevealed(1, 1), isTrue);
     });
 
     test('should end the game if a mine is revealed', () {
