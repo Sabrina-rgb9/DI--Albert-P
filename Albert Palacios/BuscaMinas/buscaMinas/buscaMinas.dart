@@ -1,98 +1,36 @@
 import 'dart:io';
 
+import 'package:buscaMinas/buscaMinas.dart';
 
 void main() {
-  var game = Buscamines();
-  game.startGame();
+  final game = Buscamines();
+  game.initializeGame();
+  _startCli(game);
 }
 
-class Buscamines {
-  late List<List<Cell>> board;
-  late int totalMoves;
-  bool gameOver = false;
+void _startCli(Buscamines game) {
+  int moves = 0;
 
-  Buscamines() {
-    totalMoves = 0;
-    board = generateBoard();
-  }
-
-
-  // Inicia el joc
-
-  void startGame() {
-    printBoard();
-    while (!gameOver) {
-      print('Escriu una comanda:');
-      String? input = stdin.readLineSync();
-      if (input != null) {
-        handleInput(input);
-      }
-    }
-    revealMines();
-    printBoard();
-    print('Has perdut!');
-    print('Número de tirades: $totalMoves');
-  }
-
-  // Gestiona la entrada de l'usuari 
-
-  void handleInput(String input) {
-    // Handle user input for revealing cells, placing flags, showing cheats, etc.
-    // Implementation will depend on the input format and game logic.
-
-    if (input.startsWith('reveal ')) { // Reveal a cell
-      var parts = input.split(' ');
-      int x = int.parse(parts[1]);
-      int y = int.parse(parts[2]);
-      revealCell(x, y);
-    } else if (input.startsWith('flag ')) { // Place a flag
-      var parts = input.split(' ');
-      int x = int.parse(parts[1]);
-      int y = int.parse(parts[2]);
-      placeFlag(x, y);
-    } else if (input == 'cheat') { // Show mines temporarily
-      // Show mines temporarily
-      revealMines();
-      printBoard();
-      // Hide mines again
-      for (var row in board) {
-        for (var cell in row) {
-          if (cell.isMine) {
-            cell.isRevealed = false;
-          }
-        }
-      }
-    }
-    totalMoves++;
-  }
-
-  // Revela una de las celdas mediante el comando del usuario 
-
-  void revealCell(int x, int y) {
-    if (x >= 0 && x < board.length && y >= 0 && y < board[0].length) {
-      board[x][y].isRevealed = true;
-      if (board[x][y].isMine) {
-        gameOver = true;
-      }
-    }
-  }
-
-  // coloca una bandera en una celda mediante el comando del usuario
-
-  void placeFlag(int x, int y) {
-    if (x >= 0 && x < board.length && y >= 0 && y < board[0].length) {
-      board[x][y].hasFlag = !board[x][y].hasFlag;
-    }
-  }
-
-  // Imprime el estado actual del tablero
   void printBoard() {
-    // Print the current state of the board
-    for (var row in board) {
-      for (var cell in row) {
+    final rows = game.board.length;
+    final cols = game.board[0].length;
+
+    // Header
+    stdout.write('   ');
+    for (int c = 0; c < cols; c++) {
+      stdout.write('$c ');
+    }
+    stdout.writeln();
+
+    for (int r = 0; r < rows; r++) {
+      stdout.write(r.toString().padLeft(2) + ' ');
+      for (int c = 0; c < cols; c++) {
+        final cell = game.board[r][c];
         if (cell.isRevealed) {
           if (cell.isMine) {
             stdout.write('* ');
+          } else if (cell.adjacentMines == 0) {
+            stdout.write('  ');
           } else {
             stdout.write('${cell.adjacentMines} ');
           }
@@ -106,39 +44,85 @@ class Buscamines {
     }
   }
 
-  // sirve para revelar todas las minas una vez el juego finaliza 
-  void revealMines() {
-    // Reveal all mines on the board
-    for (var row in board) {
-      for (var cell in row) {
-        if (cell.isMine) {
-          cell.isRevealed = true;
+  void revealMinesTemporary() {
+    final revealed = <List<int>>[];
+    for (int r = 0; r < game.board.length; r++) {
+      for (int c = 0; c < game.board[0].length; c++) {
+        if (game.board[r][c].isMine && !game.board[r][c].isRevealed) {
+          game.board[r][c].isRevealed = true;
+          revealed.add([r, c]);
         }
       }
     }
-  }
-
-  // se crea el tablero del juego con las minas 
-  List<List<Cell>> generateBoard() {
-    // Generate the game board with mines and numbers
-    List<List<Cell>> board = [];
-    for (int i = 0; i < 10; i++) {
-      List<Cell> row = [];
-      for (int j = 0; j < 10; j++) {
-        row.add(Cell());
-      }
-      board.add(row);
+    printBoard();
+    // hide again
+    for (var p in revealed) {
+      game.board[p[0]][p[1]].isRevealed = false;
     }
-    return board;
   }
-}
 
-// Clase que representa una celda del tablero
-class Cell {
-  bool isMine;
-  bool isRevealed;
-  bool hasFlag;
-  int adjacentMines;
+  printBoard();
+  while (!game.isGameOver) {
+    stdout.write('\nEscriu una comanda (reveal x y | flag x y | cheat | exit): ');
+    String? input = stdin.readLineSync();
+    if (input == null) continue;
+    input = input.trim();
+    if (input == 'exit') {
+      stdout.writeln('Sortint...');
+      break;
+    }
+    if (input == 'cheat') {
+      revealMinesTemporary();
+      continue;
+    }
 
-  Cell({this.isMine = false, this.isRevealed = false, this.hasFlag = false, this.adjacentMines = 0});
+    final parts = input.split(RegExp(r'\s+'));
+    if (parts.isEmpty) continue;
+
+    try {
+      if (parts[0] == 'reveal' && parts.length >= 3) {
+        final x = int.parse(parts[1]);
+        final y = int.parse(parts[2]);
+        // Validate
+        if (x < 0 || x >= game.board.length || y < 0 || y >= game.board[0].length) {
+          stdout.writeln('Coordenades fora de rang.');
+          continue;
+        }
+        final cell = game.board[x][y];
+        if (cell.hasFlag) {
+          stdout.writeln('Aquesta casella té una bandera. Treu-la abans de revelar.');
+          continue;
+        }
+        final exploded = game.revealCell(x, y);
+        moves++;
+        if (exploded) {
+          // Reveal all mines
+          for (var row in game.board) {
+            for (var c in row) {
+              if (c.isMine) c.isRevealed = true;
+            }
+          }
+          printBoard();
+          stdout.writeln('Has perdut! Has explodat una mina.');
+          stdout.writeln('Número de tirades: $moves');
+          break;
+        }
+        printBoard();
+      } else if (parts[0] == 'flag' && parts.length >= 3) {
+        final x = int.parse(parts[1]);
+        final y = int.parse(parts[2]);
+        if (x < 0 || x >= game.board.length || y < 0 || y >= game.board[0].length) {
+          stdout.writeln('Coordenades fora de rang.');
+          continue;
+        }
+        game.placeFlag(x, y);
+        moves++;
+        printBoard();
+      } else {
+        stdout.writeln('Comanda desconeguda. Usa: reveal x y | flag x y | cheat | exit');
+      }
+    } catch (e) {
+      stdout.writeln('Error en el parseig de la comanda. Assegura\'t d\'usar nombres enters.');
+    }
+  }
 }
