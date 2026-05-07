@@ -1,0 +1,52 @@
+[
+  {
+    "number": 1,
+    "name": "Naruto Uzumaki",
+    "type": "Hokage / Jinchūriki",
+    "ability": "Rasengan",
+    "height": "1.66 m",
+    "weight": "50.9 kg",
+    "category": "Chakra",
+    "image": "data/naruto/characters/naruto.png"
+  },
+  {
+    "number": 2,
+    "name": "Sasuke Uchiha",
+    "type": "Ninja renegado",
+    "ability": "Chidori",
+    "height": "1.68 m",
+    "weight": "52.2 kg",
+    "category": "Rayo",
+    "image": "data/naruto/characters/sasuke.png"
+  },
+  {
+    "number": 3,
+    "name": "Sakura Haruno",
+    "type": "Ninja médico",
+    "ability": "Fuerza mejorada",
+    "height": "1.61 m",
+    "weight": "45.4 kg",
+    "category": "Medicina",
+    "image": "data/naruto/characters/sakura.png"
+  },
+  {
+    "number": 4,
+    "name": "Kakashi Hatake",
+    "type": "Jōnin",
+    "ability": "Raikiri",
+    "height": "1.81 m",
+    "weight": "67.5 kg",
+    "category": "Sharingan",
+    "image": "data/naruto/characters/kakashi.png"
+  },
+  {
+    "number": 5,
+    "name": "Itachi Uchiha",
+    "type": "Akatsuki",
+    "ability": "Tsukuyomi",
+    "height": "1.78 m",
+    "weight": "58 kg",
+    "category": "Genjutsu",
+    "image": "data/naruto/characters/itachi.png"
+  }
+]

@@ -1,0 +1,105 @@
+package com.project;
+
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ResourceBundle;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.utils.UtilsViews;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+
+public class ControllerSeries implements Initializable {
+
+    @FXML
+    private ImageView imgArrowBack;
+
+    @FXML
+    private VBox list;
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        Path imagePath = null;
+        try {
+            URL imageURL = getClass().getResource("/assets/images0601/arrow-back.png");
+            Image image = new Image(imageURL.toExternalForm());
+            imgArrowBack.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error loading image asset: " + imagePath);
+            e.printStackTrace();
+        }
+
+        loadList();
+    }
+
+    /**
+     * Load series list from JSON file
+     * 
+     */
+    public void loadList() {
+        try {
+            Main.currentJSON = "Series";
+
+            URL jsonFileURL = getClass().getResource("/assets/data/series.json");
+            Path path = Paths.get(jsonFileURL.toURI());
+            String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+            JSONArray jsonInfo = new JSONArray(content);
+            String pathImages = "/assets/images0601/";
+
+            // Update global state
+            Main.currentObjects.clear();
+            for (int i = 0; i < jsonInfo.length(); i++) {
+                Main.currentObjects.add(jsonInfo.getJSONObject(i));
+            }
+
+            list.getChildren().clear();
+
+            for (int i = 0; i < jsonInfo.length(); i++) {
+                JSONObject serie = jsonInfo.getJSONObject(i);
+                // int index = i;
+
+                String name = serie.getString("name");
+                String image = serie.getString("image");
+                String color = serie.getString("color");
+                String description = serie.getString("description");
+
+                URL resource = this.getClass().getResource("/assets/subviewSeries.fxml");
+                FXMLLoader loader = new FXMLLoader(resource);
+                Parent itemPane = loader.load();
+                ControllerItem2 itemController = loader.getController();
+
+                itemController.setCircleColor(color);
+                itemController.setImage(pathImages + image);
+                itemController.setTitle(name);
+                itemController.setDescription(description);
+                itemController.setIndex(i);
+
+                // Afegir el nou element a l'espai que l'hi hem reservat (itemBox)
+                list.getChildren().add(itemPane);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar la lista de personajes");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toViewMain(MouseEvent event) {
+        // Limpiar campos
+        Main.currentObject = -1;
+        Main.currentObjects.clear();
+        UtilsViews.setViewAnimating("Mobile");
+    }
+}

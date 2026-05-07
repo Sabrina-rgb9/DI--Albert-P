@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="300.0"
+            style="-fx-background-color: #1a1423;"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.exercici0601.ControllerCharacters">
+    <children>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" maxHeight="55.0" minHeight="55.0"
+                      style="-fx-background-color: #ff8a1f; -fx-border-color: #ffd34d; -fx-border-width: 0 0 3 0;">
+                    <children>
+                        <ImageView fx:id="imgArrowBack" fitHeight="25.0" fitWidth="25.0"
+                                   onMouseClicked="#toViewMain" pickOnBounds="true" preserveRatio="true">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <HBox.margin>
+                                <Insets left="15.0" right="15.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <Label text="Ninjas" textFill="#1f1a24" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS"
+                            style="-fx-background: #1a1423; -fx-background-color: #1a1423;">
+                    <content>
+                        <VBox fx:id="list" alignment="TOP_CENTER" style="-fx-background-color: #1a1423;" />
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
