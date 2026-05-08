@@ -1,15 +1,19 @@
-// Modelo de una categoría.
-// Sirve para convertir el JSON que llega del servidor en un objeto Dart.
 class Category {
   final int id;
   final String name;
+  final String description;
 
-  Category({required this.id, required this.name});
+  Category({
+    required this.id,
+    required this.name,
+    required this.description,
+  });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'],
-      name: json['name'],
+      id: json["id"],
+      name: json["name"],
+      description: json["description"] ?? "",
     );
   }
 }

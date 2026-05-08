@@ -35,6 +35,9 @@ public class OllamaHttpClient implements OllamaClient {
                 .build();
     }
 
+    // ================== IMPLEMENTACIÓN DE LOS MÉTODOS DE OllamaClient ==================
+
+    // Método para streaming de texto
     @Override
     public CompletableFuture<Void> streamText(String prompt, Consumer<String> onToken, Runnable onComplete, Consumer<Throwable> onError, AtomicBoolean cancelFlag) {
         try {
@@ -43,16 +46,20 @@ public class OllamaHttpClient implements OllamaClient {
             payload.put("prompt", prompt);
             payload.put("stream", true);
 
+
+            // Construye la petición HTTP
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(OLLAMA_URL))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(payload.toString()))
                     .build();
 
+                    // Envía la petición y procesa la respuesta en streaming
             return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
                     .thenCompose(response -> CompletableFuture.runAsync(() -> {
                         try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body()))) {
                             String line;
+                            // Lee cada línea del stream, que se espera que sea un JSON con un token
                             while ((line = reader.readLine()) != null && !cancelFlag.get()) {
                                 if (line.trim().isEmpty()) continue;
                                 JSONObject chunk = new JSONObject(line);
@@ -76,6 +83,7 @@ public class OllamaHttpClient implements OllamaClient {
         }
     }
 
+    // Método para generación de imagen (no streaming)
     @Override
     public CompletableFuture<String> generateImageComplete(File image, String prompt, AtomicBoolean cancelFlag) {
         try {
@@ -90,6 +98,7 @@ public class OllamaHttpClient implements OllamaClient {
             imagesArray.put(base64);
             payload.put("images", imagesArray);
 
+            // Construye la petición HTTP
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(OLLAMA_URL))
                     .header("Content-Type", "application/json")

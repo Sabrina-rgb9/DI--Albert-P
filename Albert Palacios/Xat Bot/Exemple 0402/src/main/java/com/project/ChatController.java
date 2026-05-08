@@ -73,8 +73,10 @@ public class ChatController {
         isCancelled.set(false);
         setUiBusy("Generant resposta...");
 
+        // Inicia la petición de texto con streaming
         currentRequest = ollamaClient.streamText(
                 prompt,
+                // Callback para cada token recibido
                 token -> Platform.runLater(() -> botMsg.setText(botMsg.getText() + token)),
                 () -> Platform.runLater(this::cleanupAfterRequest),
                 err -> Platform.runLater(() -> appendToChat("[Error en petició de text]", false)),
@@ -88,10 +90,16 @@ public class ChatController {
     private void onPickImage() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Elegir imagen");
+      
+        
         chooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")
         );
+
+        // Abre el diálogo de selección de archivos
         File file = chooser.showOpenDialog(textInput.getScene().getWindow());
+
+        // Si se ha seleccionado un archivo, lo guardamos y mostramos su nombre
         if (file != null) {
             selectedImage = file;
             lblImageName.setText(file.getName());
@@ -106,7 +114,7 @@ public class ChatController {
         }
 
         String prompt = textInput.getText();
-        if (prompt == null || prompt.isBlank()) prompt = "Describe esta imagen";
+        if (prompt == null || prompt.isBlank()) prompt = "Describe esta imagen en español.";
 
         appendToChat(prompt + " (imatge: " + selectedImage.getName() + ")", true);
         textInput.clear();
@@ -114,12 +122,13 @@ public class ChatController {
         isCancelled.set(false);
         setUiBusy("Thinking...");
 
+        // Inicia la petición de generación de imagen con Ollama
         currentRequest = ollamaClient.generateImageComplete(selectedImage, prompt, isCancelled)
-                .thenAccept(responseText -> Platform.runLater(() -> {
+                .thenAccept(responseText -> Platform.runLater(() -> { // Muestra la respuesta del bot
                     appendToChat(responseText, false);
                     cleanupAfterRequest();
                 }))
-                .exceptionally(e -> {
+                .exceptionally(e -> { // Manejo de errores
                     Platform.runLater(() -> appendToChat("[Error durant petició d'imatge: " + e.getMessage() + "]", false));
                     cleanupAfterRequest();
                     return null;
@@ -137,6 +146,7 @@ public class ChatController {
 
     // ================== GESTIÓN DE LA INTERFAZ ==================
 
+    // Habilita/deshabilita botones y muestra estado durante la petición
     private void setUiBusy(String msg) {
         Platform.runLater(() -> {
             btnStop.setDisable(false);

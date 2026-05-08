@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 /**
  * CellFactory para mostrar mensajes en el ListView.
@@ -23,10 +24,13 @@ public class ChatCell extends ListCell<ChatMessage> {
             Label label = new Label();
             label.textProperty().bind(item.textProperty()); // Bind al texto del mensaje
             label.setWrapText(true);
-            label.setPadding(new Insets(5,10,5,10));
+            label.setMaxWidth(Double.MAX_VALUE);
+            label.setPadding(new Insets(8,12,8,12));
+            HBox.setHgrow(label, Priority.ALWAYS);
 
             // Estilizar según si es mensaje del usuario o de la IA
             HBox hbox = new HBox(label);
+            hbox.maxWidthProperty().bind(getListView().widthProperty().subtract(40));
             if (item.isUser()) {
                 hbox.setAlignment(Pos.CENTER_RIGHT);
                 label.setStyle("-fx-background-color: #DCF8C6; -fx-background-radius: 10; -fx-text-fill: black;");

@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Paisajes naturales",
+    "description": "Fotografías reales de montañas, bosques, lagos y espacios abiertos."
+  },
+  {
+    "id": 2,
+    "name": "Ciudad y arquitectura",
+    "description": "Fotografías urbanas reales con edificios, calles y estructuras."
+  },
+  {
+    "id": 3,
+    "name": "Viajes y aventura",
+    "description": "Escenas reales pensadas para una temática de viajes y exploración."
+  },
+  {
+    "id": 4,
+    "name": "Estilo de vida",
+    "description": "Imágenes reales de personas, momentos cotidianos y ambiente moderno."
+  },
+  {
+    "id": 5,
+    "name": "Detalles visuales",
+    "description": "Fotografías reales de objetos, texturas y primeros planos."
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "id": 1,
+    "title": "Montañas al atardecer",
+    "description": "Paisaje real con montañas y luz natural, ideal para una categoría de naturaleza.",
+    "categoryId": 1,
+    "image": "https://picsum.photos/id/10/900/600"
+  },
+  {
+    "id": 2,
+    "title": "Bosque profundo",
+    "description": "Fotografía real de un entorno verde con árboles y sensación de profundidad.",
+    "categoryId": 1,
+    "image": "https://picsum.photos/id/1043/900/600"
+  },
+  {
+    "id": 3,
+    "title": "Lago tranquilo",
+    "description": "Imagen real de agua y paisaje natural con ambiente calmado.",
+    "categoryId": 1,
+    "image": "https://picsum.photos/id/1015/900/600"
+  },
+  {
+    "id": 4,
+    "title": "Camino natural",
+    "description": "Escena real de exterior con camino y vegetación alrededor.",
+    "categoryId": 1,
+    "image": "https://picsum.photos/id/1039/900/600"
+  },
+  {
+    "id": 5,
+    "title": "Horizonte abierto",
+    "description": "Fotografía real de paisaje amplio con cielo y profundidad.",
+    "categoryId": 1,
+    "image": "https://picsum.photos/id/1025/900/600"
+  },
+  {
+    "id": 6,
+    "title": "Edificio urbano",
+    "description": "Fotografía real de arquitectura moderna dentro de un entorno urbano.",
+    "categoryId": 2,
+    "image": "https://picsum.photos/id/1011/900/600"
+  },
+  {
+    "id": 7,
+    "title": "Calle de ciudad",
+    "description": "Imagen real con ambiente urbano, luces y perspectiva de calle.",
+    "categoryId": 2,
+    "image": "https://picsum.photos/id/1004/900/600"
+  },
+  {
+    "id": 8,
+    "title": "Fachada moderna",
+    "description": "Fotografía real centrada en líneas, estructura y diseño arquitectónico.",
+    "categoryId": 2,
+    "image": "https://picsum.photos/id/1021/900/600"
+  },
+  {
+    "id": 9,
+    "title": "Ciudad desde arriba",
+    "description": "Imagen real con vista urbana y sensación de altura.",
+    "categoryId": 2,
+    "image": "https://picsum.photos/id/1035/900/600"
+  },
+  {
+    "id": 10,
+    "title": "Arquitectura clásica",
+    "description": "Fotografía real de edificio o estructura con presencia visual destacada.",
+    "categoryId": 2,
+    "image": "https://picsum.photos/id/1044/900/600"
+  },
+  {
+    "id": 11,
+    "title": "Ruta de viaje",
+    "description": "Fotografía real asociada a carretera, movimiento y exploración.",
+    "categoryId": 3,
+    "image": "https://picsum.photos/id/1000/900/600"
+  },
+  {
+    "id": 12,
+    "title": "Escapada al exterior",
+    "description": "Imagen real de aventura y entorno abierto para temática de viajes.",
+    "categoryId": 3,
+    "image": "https://picsum.photos/id/846/900/600"
+  },
+  {
+    "id": 13,
+    "title": "Destino natural",
+    "description": "Fotografía real de lugar atractivo para visitar y descubrir.",
+    "categoryId": 3,
+    "image": "https://picsum.photos/id/861/900/600"
+  },
+  {
+    "id": 14,
+    "title": "Exploración",
+    "description": "Imagen real con composición de viaje y descubrimiento.",
+    "categoryId": 3,
+    "image": "https://picsum.photos/id/182/900/600"
+  },
+  {
+    "id": 15,
+    "title": "Lugar escondido",
+    "description": "Fotografía real con estética de escapada y rincón especial.",
+    "categoryId": 3,
+    "image": "https://picsum.photos/id/892/900/600"
+  },
+  {
+    "id": 16,
+    "title": "Retrato espontáneo",
+    "description": "Fotografía real de estilo de vida con una persona como protagonista.",
+    "categoryId": 4,
+    "image": "https://picsum.photos/id/1005/900/600"
+  },
+  {
+    "id": 17,
+    "title": "Momento cotidiano",
+    "description": "Imagen real de ambiente diario con composición natural.",
+    "categoryId": 4,
+    "image": "https://picsum.photos/id/1018/900/600"
+  },
+  {
+    "id": 18,
+    "title": "Ambiente relajado",
+    "description": "Fotografía real con tono tranquilo y estilo moderno.",
+    "categoryId": 4,
+    "image": "https://picsum.photos/id/1027/900/600"
+  },
+  {
+    "id": 19,
+    "title": "Vida urbana",
+    "description": "Imagen real relacionada con movimiento, ciudad y rutina diaria.",
+    "categoryId": 4,
+    "image": "https://picsum.photos/id/1024/900/600"
+  },
+  {
+    "id": 20,
+    "title": "Escena social",
+    "description": "Fotografía real con estética cercana y humana.",
+    "categoryId": 4,
+    "image": "https://picsum.photos/id/1028/900/600"
+  },
+  {
+    "id": 21,
+    "title": "Detalle de textura",
+    "description": "Primer plano real con textura y contraste visual.",
+    "categoryId": 5,
+    "image": "https://picsum.photos/id/95/900/600"
+  },
+  {
+    "id": 22,
+    "title": "Objeto en primer plano",
+    "description": "Fotografía real con enfoque en un detalle concreto.",
+    "categoryId": 5,
+    "image": "https://picsum.photos/id/888/900/600"
+  },
+  {
+    "id": 23,
+    "title": "Composición minimalista",
+    "description": "Imagen real sencilla con composición limpia y visual.",
+    "categoryId": 5,
+    "image": "https://picsum.photos/id/1033/900/600"
+  },
+  {
+    "id": 24,
+    "title": "Detalle luminoso",
+    "description": "Fotografía real con luz, color y contraste.",
+    "categoryId": 5,
+    "image": "https://picsum.photos/id/1054/900/600"
+  },
+  {
+    "id": 25,
+    "title": "Forma y color",
+    "description": "Imagen real centrada en formas, colores y estética visual.",
+    "categoryId": 5,
+    "image": "https://picsum.photos/id/1081/900/600"
+  }
+]
