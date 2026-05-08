@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "categoryId": 1,
+    "name": "Montañas de aventura",
+    "description": "Paisaje de montaña ideal para una escapada de senderismo y fotografía.",
+    "image": "https://picsum.photos/id/1003/900/600"
+  },
+  {
+    "id": 2,
+    "categoryId": 1,
+    "name": "Costa tranquila",
+    "description": "Vista de costa y mar para representar destinos de verano.",
+    "image": "https://picsum.photos/id/1015/900/600"
+  },
+  {
+    "id": 3,
+    "categoryId": 1,
+    "name": "Camino rural",
+    "description": "Ruta tranquila para viajes por carretera y pueblos pequeños.",
+    "image": "https://picsum.photos/id/1036/900/600"
+  },
+  {
+    "id": 4,
+    "categoryId": 1,
+    "name": "Lago al atardecer",
+    "description": "Escenario natural perfecto para turismo relajado.",
+    "image": "https://picsum.photos/id/1016/900/600"
+  },
+  {
+    "id": 5,
+    "categoryId": 1,
+    "name": "Ciudad nocturna",
+    "description": "Ambiente urbano para escapadas de fin de semana.",
+    "image": "https://picsum.photos/id/1011/900/600"
+  },
+  {
+    "id": 6,
+    "categoryId": 1,
+    "name": "Bosque con sendero",
+    "description": "Destino verde para caminar y desconectar.",
+    "image": "https://picsum.photos/id/1020/900/600"
+  },
+  {
+    "id": 7,
+    "categoryId": 2,
+    "name": "Bosque profundo",
+    "description": "Fotografía real de árboles y vegetación para la categoría naturaleza.",
+    "image": "https://picsum.photos/id/10/900/600"
+  },
+  {
+    "id": 8,
+    "categoryId": 2,
+    "name": "Río entre rocas",
+    "description": "Paisaje de agua en movimiento y piedras naturales.",
+    "image": "https://picsum.photos/id/1043/900/600"
+  },
+  {
+    "id": 9,
+    "categoryId": 2,
+    "name": "Nieve en la montaña",
+    "description": "Entorno frío con montaña nevada y cielo claro.",
+    "image": "https://picsum.photos/id/1038/900/600"
+  },
+  {
+    "id": 10,
+    "categoryId": 2,
+    "name": "Campo abierto",
+    "description": "Paisaje amplio con sensación de calma y espacio.",
+    "image": "https://picsum.photos/id/1025/900/600"
+  },
+  {
+    "id": 11,
+    "categoryId": 2,
+    "name": "Playa salvaje",
+    "description": "Zona costera natural con arena y vegetación.",
+    "image": "https://picsum.photos/id/1056/900/600"
+  },
+  {
+    "id": 12,
+    "categoryId": 2,
+    "name": "Cascada",
+    "description": "Agua cayendo en un entorno natural.",
+    "image": "https://picsum.photos/id/15/900/600"
+  },
+  {
+    "id": 13,
+    "categoryId": 3,
+    "name": "Portátil de trabajo",
+    "description": "Dispositivo tecnológico usado para estudiar, programar y crear proyectos.",
+    "image": "https://picsum.photos/id/0/900/600"
+  },
+  {
+    "id": 14,
+    "categoryId": 3,
+    "name": "Cámara fotográfica",
+    "description": "Herramienta para capturar imágenes y vídeos.",
+    "image": "https://picsum.photos/id/250/900/600"
+  },
+  {
+    "id": 15,
+    "categoryId": 3,
+    "name": "Mesa de programación",
+    "description": "Espacio de trabajo con ordenador y material tecnológico.",
+    "image": "https://picsum.photos/id/180/900/600"
+  },
+  {
+    "id": 16,
+    "categoryId": 3,
+    "name": "Componentes electrónicos",
+    "description": "Detalle de piezas relacionadas con tecnología e innovación.",
+    "image": "https://picsum.photos/id/201/900/600"
+  },
+  {
+    "id": 17,
+    "categoryId": 3,
+    "name": "Pantalla y teclado",
+    "description": "Equipo básico para desarrollo y diseño digital.",
+    "image": "https://picsum.photos/id/2/900/600"
+  },
+  {
+    "id": 18,
+    "categoryId": 3,
+    "name": "Luces digitales",
+    "description": "Imagen abstracta asociada al mundo tecnológico.",
+    "image": "https://picsum.photos/id/119/900/600"
+  },
+  {
+    "id": 19,
+    "categoryId": 4,
+    "name": "Desayuno completo",
+    "description": "Plato real para representar recetas y comida diaria.",
+    "image": "https://picsum.photos/id/292/900/600"
+  },
+  {
+    "id": 20,
+    "categoryId": 4,
+    "name": "Café artesanal",
+    "description": "Bebida caliente en una escena de cafetería.",
+    "image": "https://picsum.photos/id/431/900/600"
+  },
+  {
+    "id": 21,
+    "categoryId": 4,
+    "name": "Fruta fresca",
+    "description": "Alimentos saludables con colores naturales.",
+    "image": "https://picsum.photos/id/488/900/600"
+  },
+  {
+    "id": 22,
+    "categoryId": 4,
+    "name": "Pan recién hecho",
+    "description": "Producto de panadería para una categoría gastronómica.",
+    "image": "https://picsum.photos/id/312/900/600"
+  },
+  {
+    "id": 23,
+    "categoryId": 4,
+    "name": "Mesa de restaurante",
+    "description": "Presentación de comida en ambiente de restaurante.",
+    "image": "https://picsum.photos/id/1080/900/600"
+  },
+  {
+    "id": 24,
+    "categoryId": 4,
+    "name": "Postre casero",
+    "description": "Dulce preparado para una ficha de detalle visual.",
+    "image": "https://picsum.photos/id/1060/900/600"
+  },
+  {
+    "id": 25,
+    "categoryId": 5,
+    "name": "Coche clásico",
+    "description": "Vehículo con diseño tradicional para amantes del motor.",
+    "image": "https://picsum.photos/id/1071/900/600"
+  },
+  {
+    "id": 26,
+    "categoryId": 5,
+    "name": "Carretera abierta",
+    "description": "Escena de conducción y viaje en automóvil.",
+    "image": "https://picsum.photos/id/1072/900/600"
+  },
+  {
+    "id": 27,
+    "categoryId": 5,
+    "name": "Interior de coche",
+    "description": "Detalle relacionado con transporte y movilidad.",
+    "image": "https://picsum.photos/id/111/900/600"
+  },
+  {
+    "id": 28,
+    "categoryId": 5,
+    "name": "Coche deportivo",
+    "description": "Imagen de vehículo moderno y atractivo.",
+    "image": "https://picsum.photos/id/133/900/600"
+  },
+  {
+    "id": 29,
+    "categoryId": 5,
+    "name": "Ruta de montaña",
+    "description": "Carretera curvada ideal para conducción panorámica.",
+    "image": "https://picsum.photos/id/1047/900/600"
+  },
+  {
+    "id": 30,
+    "categoryId": 5,
+    "name": "Vehículo urbano",
+    "description": "Transporte dentro de una ciudad.",
+    "image": "https://picsum.photos/id/1070/900/600"
+  },
+  {
+    "id": 31,
+    "categoryId": 6,
+    "name": "Edificio moderno",
+    "description": "Arquitectura contemporánea con líneas limpias.",
+    "image": "https://picsum.photos/id/1048/900/600"
+  },
+  {
+    "id": 32,
+    "categoryId": 6,
+    "name": "Puente urbano",
+    "description": "Estructura arquitectónica que conecta zonas de una ciudad.",
+    "image": "https://picsum.photos/id/1031/900/600"
+  },
+  {
+    "id": 33,
+    "categoryId": 6,
+    "name": "Fachada antigua",
+    "description": "Detalle de construcción clásica y patrimonio.",
+    "image": "https://picsum.photos/id/1029/900/600"
+  },
+  {
+    "id": 34,
+    "categoryId": 6,
+    "name": "Escaleras interiores",
+    "description": "Elemento arquitectónico con formas geométricas.",
+    "image": "https://picsum.photos/id/1067/900/600"
+  },
+  {
+    "id": 35,
+    "categoryId": 6,
+    "name": "Ciudad vertical",
+    "description": "Vista de edificios altos y espacio urbano.",
+    "image": "https://picsum.photos/id/1012/900/600"
+  },
+  {
+    "id": 36,
+    "categoryId": 6,
+    "name": "Casa junto al paisaje",
+    "description": "Construcción integrada con un entorno natural.",
+    "image": "https://picsum.photos/id/1018/900/600"
+  }
+]

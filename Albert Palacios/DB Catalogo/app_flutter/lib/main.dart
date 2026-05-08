@@ -60,6 +60,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     super.dispose();
   }
 
+  // Carga las categorías desde el backend Node mediante HTTP GET.
   Future<void> _loadCategories() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/categories'));
@@ -82,6 +83,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     }
   }
 
+  // Envía el texto del buscador al endpoint /search y pinta los resultados.
   Future<void> _searchItems() async {
     final query = _searchController.text.trim();
 
@@ -177,7 +179,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       child: ListTile(
                         leading: Hero(
                           tag: 'item-image-${item.id}',
-                          child: Image.network('$baseUrl/images/thumbs/${item.image}', width: 60, fit: BoxFit.cover),
+                          child: Image.network(buildImageUrl(item.image), width: 60, height: 60, fit: BoxFit.cover),
                         ),
                         title: Text(item.name),
                         subtitle: Text(item.description, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -232,6 +234,8 @@ class _ItemsPageState extends State<ItemsPage> {
     super.dispose();
   }
 
+  // Detecta cuándo el usuario llega casi al final de la lista.
+  // En ese momento pide la siguiente página al servidor.
   void _checkScrollPosition() {
     final nearBottom = _scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 150;
@@ -242,6 +246,8 @@ class _ItemsPageState extends State<ItemsPage> {
     }
   }
 
+  // Carga una página de items de la categoría seleccionada.
+  // La paginación evita cargar todos los datos de golpe.
   Future<void> _loadItems() async {
     setState(() => _loading = true);
 
@@ -289,7 +295,7 @@ class _ItemsPageState extends State<ItemsPage> {
             child: ListTile(
               leading: Hero(
                 tag: 'item-image-${item.id}',
-                child: Image.network('$baseUrl/images/thumbs/${item.image}', width: 70, fit: BoxFit.cover),
+                child: Image.network(buildImageUrl(item.image), width: 70, height: 70, fit: BoxFit.cover),
               ),
               title: Text(item.name),
               subtitle: Text(item.description, maxLines: 2, overflow: TextOverflow.ellipsis),

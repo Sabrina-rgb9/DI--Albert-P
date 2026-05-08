@@ -103,7 +103,10 @@ app.get('/item/:id/image', (req, res) => {
     return res.status(404).json({ error: 'Item no encontrado' });
   }
 
-  res.json({ imageUrl: `/images/thumbs/${item.image}` });
+  // Si la imagen ya es una URL externa, la devolvemos directamente.
+  // Si es un archivo local, construimos la ruta pública del servidor.
+  const imageUrl = item.image.startsWith('http') ? item.image : `/images/thumbs/${item.image}`;
+  res.json({ imageUrl });
 });
 
 app.listen(PORT, () => {

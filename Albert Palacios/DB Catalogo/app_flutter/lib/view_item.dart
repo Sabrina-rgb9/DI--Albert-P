@@ -10,7 +10,8 @@ class ItemDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = '$baseUrl/images/thumbs/${item.image}';
+    // Reutilizamos la función de config.dart para aceptar imágenes locales o URLs reales.
+    final imageUrl = buildImageUrl(item.image);
 
     return Scaffold(
       appBar: AppBar(title: Text(item.name)),
@@ -23,7 +24,8 @@ class ItemDetailPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               child: Hero(
                 tag: 'item-image-${item.id}',
-                child: InteractiveViewer(
+                child: // InteractiveViewer permite hacer zoom y mover la imagen en la pantalla de detalle.
+                InteractiveViewer(
                   minScale: 1,
                   maxScale: 4,
                   child: Image.network(
