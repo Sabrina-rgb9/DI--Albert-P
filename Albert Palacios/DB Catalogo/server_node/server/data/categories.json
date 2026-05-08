@@ -1,26 +1,14 @@
 [
   {
     "id": 1,
-    "name": "Viajes"
+    "name": "Videojuegos"
   },
   {
     "id": 2,
-    "name": "Naturaleza"
-  },
-  {
-    "id": 3,
-    "name": "Tecnología"
-  },
-  {
-    "id": 4,
-    "name": "Comida"
-  },
-  {
-    "id": 5,
     "name": "Coches"
   },
   {
-    "id": 6,
-    "name": "Arquitectura"
+    "id": 3,
+    "name": "Países"
   }
 ]
