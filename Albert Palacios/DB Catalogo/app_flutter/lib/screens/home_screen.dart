@@ -4,6 +4,9 @@ import '../services/api_service.dart';
 import 'items_screen.dart';
 import 'search_screen.dart';
 
+/// Pantalla principal de la aplicación.
+///
+/// Carga la lista de categorías y permite navegar a los items de cada una.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -31,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
             tooltip: "Buscar",
             icon: const Icon(Icons.search),
             onPressed: () {
+              // Abre la pantalla de búsqueda.
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const SearchScreen()),
@@ -43,10 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
         future: categoriesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+            // Muestra un loader mientras se obtienen las categorías.
             return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
+            // Mensaje de error si la API no responde.
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -74,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   subtitle: Text(category.description),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
+                    // Navega a la pantalla de items de esta categoría.
                     Navigator.push(
                       context,
                       MaterialPageRoute(

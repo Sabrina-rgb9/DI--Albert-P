@@ -5,6 +5,9 @@ import '../services/api_service.dart';
 import '../widgets/catalog_image.dart';
 import 'detail_screen.dart';
 
+/// Pantalla que muestra los items de una categoría seleccionada.
+///
+/// Carga los datos desde la API y aplica paginación básica por scroll.
 class ItemsScreen extends StatefulWidget {
   final Category category;
 
@@ -18,11 +21,15 @@ class _ItemsScreenState extends State<ItemsScreen> {
   final ApiService api = ApiService();
   final ScrollController scrollController = ScrollController();
 
+  // Lista completa de items descargados de la API.
   List<CatalogItem> allItems = [];
+  // Lista de items mostrados actualmente en pantalla.
   List<CatalogItem> visibleItems = [];
   bool loading = true;
 
+  // Número de items mostrados actualmente.
   int visibleCount = 0;
+  // Tamaño del bloque de paginación.
   final int pageSize = 3;
 
   @override
@@ -32,6 +39,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
     scrollController.addListener(handleScroll);
   }
 
+  /// Carga los items de la categoría desde la API.
+  ///
+  /// Al finalizar, actualiza el estado y muestra los primeros resultados.
   Future<void> loadItems() async {
     final items = await api.getItemsByCategory(widget.category.id);
 
@@ -43,7 +53,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
     });
   }
 
-  // Scroll infinito simple: va mostrando más elementos al llegar abajo.
+  /// Scroll infinito simple: añade más elementos cuando el usuario llega al final.
   void handleScroll() {
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 80) {
@@ -80,6 +90,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                   margin: const EdgeInsets.only(bottom: 18),
                   child: InkWell(
                     onTap: () {
+                      // Navega a la pantalla de detalle del item.
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -4,6 +4,9 @@ import '../services/api_service.dart';
 import '../widgets/catalog_image.dart';
 import 'detail_screen.dart';
 
+/// Pantalla de búsqueda de items.
+///
+/// Permite escribir una consulta y mostrar resultados devueltos por la API.
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -18,6 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<CatalogItem> results = [];
   bool loading = false;
 
+  /// Ejecuta la búsqueda en el backend y actualiza los resultados.
   Future<void> search(String query) async {
     setState(() => loading = true);
 
@@ -74,6 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           title: Text(item.title),
                           subtitle: Text(item.description),
                           onTap: () {
+                            // Al tocar un resultado, se abre la pantalla de detalle.
                             Navigator.push(
                               context,
                               MaterialPageRoute(
