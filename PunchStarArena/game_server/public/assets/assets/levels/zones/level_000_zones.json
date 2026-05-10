@@ -1,0 +1,88 @@
+{
+  "zoneGroups": [
+    {
+      "id": "__main__",
+      "name": "Main",
+      "collapsed": false
+    }
+  ],
+  "zones": [
+    {
+      "name": "death_bottom",
+      "type": "death",
+      "gameplayData": "",
+      "x": -500,
+      "y": 850,
+      "width": 2200,
+      "height": 200,
+      "color": "red",
+      "groupId": "__main__"
+    },
+    {
+      "name": "death_left",
+      "type": "death",
+      "gameplayData": "",
+      "x": -500,
+      "y": 0,
+      "width": 80,
+      "height": 1000,
+      "color": "red",
+      "groupId": "__main__"
+    },
+    {
+      "name": "death_right",
+      "type": "death",
+      "gameplayData": "",
+      "x": 1500,
+      "y": 0,
+      "width": 80,
+      "height": 1000,
+      "color": "red",
+      "groupId": "__main__"
+    },
+    {
+      "name": "main_platform",
+      "type": "platform",
+      "gameplayData": "",
+      "x": 260,
+      "y": 520,
+      "width": 760,
+      "height": 34,
+      "color": "cyan",
+      "groupId": "__main__"
+    },
+    {
+      "name": "left_platform",
+      "type": "platform",
+      "gameplayData": "",
+      "x": 150,
+      "y": 410,
+      "width": 220,
+      "height": 26,
+      "color": "cyan",
+      "groupId": "__main__"
+    },
+    {
+      "name": "right_platform",
+      "type": "platform",
+      "gameplayData": "",
+      "x": 910,
+      "y": 410,
+      "width": 220,
+      "height": 26,
+      "color": "cyan",
+      "groupId": "__main__"
+    },
+    {
+      "name": "top_platform",
+      "type": "platform",
+      "gameplayData": "",
+      "x": 520,
+      "y": 320,
+      "width": 240,
+      "height": 24,
+      "color": "cyan",
+      "groupId": "__main__"
+    }
+  ]
+}

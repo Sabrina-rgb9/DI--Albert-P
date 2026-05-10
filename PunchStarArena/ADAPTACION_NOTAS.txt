@@ -1,0 +1,2 @@
+Esta carpeta es una adaptación técnica del proyecto WrathInJapan hacia una ambientación espacial.
+Se mantienen los JSON de level/layers/paths/zones/animations y la estructura Proxmox.

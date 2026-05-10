@@ -1,0 +1,230 @@
+{
+  "name": "Punch Star Arena",
+  "description": "Battle royale espacial 2D basado en la arquitectura WrathInJapan.",
+  "levels": [
+    {
+      "name": "Orbital Arena",
+      "description": "Plataforma espacial central donde los astronautas se pelean.",
+      "gameplayData": "",
+      "layers": [
+        {
+          "name": "platforms",
+          "gameplayData": "",
+          "x": 0,
+          "y": 0,
+          "depth": 0.0,
+          "tilesSheetFile": "media/Space_Platform_Tiles.png",
+          "tilesWidth": 32,
+          "tilesHeight": 32,
+          "visible": true,
+          "groupId": "__main__",
+          "tileMapFile": "tilemaps/level_000_layer_000.json"
+        },
+        {
+          "name": "background",
+          "gameplayData": "",
+          "x": 0,
+          "y": 0,
+          "depth": -1.0,
+          "tilesSheetFile": "media/space_background.png",
+          "tilesWidth": 1024,
+          "tilesHeight": 617,
+          "visible": true,
+          "groupId": "__main__",
+          "tileMapFile": "tilemaps/level_000_layer_001.json"
+        }
+      ],
+      "layerGroups": [
+        {
+          "id": "__main__",
+          "name": "Main",
+          "collapsed": false
+        }
+      ],
+      "sprites": [
+        {
+          "name": "astronaut_template",
+          "gameplayData": "",
+          "type": "character",
+          "animationId": "anim_1775909187553629",
+          "x": 530,
+          "y": 455,
+          "width": 64,
+          "height": 64,
+          "imageFile": "media/idle_2.png",
+          "flipX": false,
+          "flipY": false,
+          "depth": 0.0,
+          "groupId": "__main__"
+        }
+      ],
+      "spriteGroups": [
+        {
+          "id": "__main__",
+          "name": "Main",
+          "collapsed": false
+        }
+      ],
+      "groupId": "__main__",
+      "viewportWidth": 1024,
+      "viewportHeight": 700,
+      "viewportX": 1382,
+      "viewportY": 811,
+      "viewportAdaptation": "expand",
+      "viewportInitialColor": "green",
+      "viewportPreviewColor": "amber",
+      "backgroundColorHex": "#060018",
+      "depthSensitivity": 0.08,
+      "zonesFile": "zones/level_000_zones.json",
+      "pathsFile": "paths/level_000_paths.json"
+    }
+  ],
+  "levelGroups": [
+    {
+      "id": "__main__",
+      "name": "Main",
+      "collapsed": false
+    }
+  ],
+  "mediaAssets": [
+    {
+      "name": "space_menu_background",
+      "fileName": "media/space_menu_background.png",
+      "mediaType": "tileset",
+      "tileWidth": 2756,
+      "tileHeight": 1440,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "space_platforms",
+      "fileName": "media/Space_Platform_Tiles.png",
+      "mediaType": "tileset",
+      "tileWidth": 32,
+      "tileHeight": 32,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "idle",
+      "fileName": "media/idle_2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 64,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "jump",
+      "fileName": "media/jump.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 66,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "hurt",
+      "fileName": "media/hurt.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 64,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "attack1",
+      "fileName": "media/attack1_2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 96,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "attack2",
+      "fileName": "media/attack2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 94,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "attack3",
+      "fileName": "media/attack3.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 94,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "move",
+      "fileName": "media/move_2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 65,
+      "tileHeight": 64,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "heal_bar",
+      "fileName": "media/heal_bar_2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 20,
+      "tileHeight": 20,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "anim_healbar",
+      "fileName": "media/anim_healbar_2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 20,
+      "tileHeight": 20,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "heal_powerup",
+      "fileName": "media/heal_2.png",
+      "mediaType": "spritesheet",
+      "tileWidth": 20,
+      "tileHeight": 20,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    },
+    {
+      "name": "space_background",
+      "fileName": "media/space_background.png",
+      "mediaType": "tileset",
+      "tileWidth": 1024,
+      "tileHeight": 617,
+      "selectionColorHex": "#FFCC00",
+      "groupId": "__main__"
+    }
+  ],
+  "mediaGroups": [
+    {
+      "id": "__main__",
+      "name": "Main",
+      "collapsed": false
+    }
+  ],
+  "zoneTypes": [
+    {
+      "name": "Default",
+      "color": "blue"
+    },
+    {
+      "name": "death",
+      "color": "red"
+    },
+    {
+      "name": "platform",
+      "color": "orange"
+    }
+  ],
+  "animationsFile": "animations/animations.json"
+}
