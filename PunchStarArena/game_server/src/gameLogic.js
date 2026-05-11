@@ -51,6 +51,16 @@ const DIRECTIONS = {
 const LEVEL = loadMultiplayerLevel();
 const PLAYER_TEMPLATE = findPlayerTemplate(LEVEL.sprites);
 const GEM_TEMPLATE_BY_TYPE = buildGemTemplateMap(LEVEL.sprites);
+const HEAL_ITEM_WIDTH = 18;
+const HEAL_ITEM_HEIGHT = 18;
+const HEAL_AMOUNT = 35;
+
+const HEAL_SPAWN_POINTS = [
+    { x: 350, y: 425 },
+    { x: 560, y: 425 },
+    { x: 770, y: 425 },
+    { x: 980, y: 425 },
+];
 // Chance (per spawn slot) to turn a gem into a heal powerup (0.0 - 1.0)
 const HEAL_POWERUP_PROBABILITY = 0.05;
 
@@ -698,7 +708,7 @@ class GameLogic {
         this.positionPlayersForStart();
         // Spawn gems (and occasional heal powerups) when the match starts
         try {
-            this.spawnGems();
+            this.spawnHealItems();
         } catch (ex) {
             // ignore spawn errors
         }
@@ -1099,13 +1109,9 @@ class GameLogic {
                 this.gemCollisionRect(gem)
             )) {
                 const t = String(gem.type || '').toLowerCase();
-                if (t.includes('heal') || t.includes('heal_powerup')) {
-                    // Full heal: reset damage and restore stocks
-                    player.damage = 0;
-                    player.stocks = MAX_STOCKS;
+                if (t.includes('heal')) {
+                    player.damage = Math.max(0, player.damage - HEAL_AMOUNT);
                     player.hurtTimer = 0;
-                    player.invincibleTimer = INVINCIBLE_DURATION_S;
-                    // count as collected for stats
                     player.gemsCollected += 1;
                 } else {
                     player.score += gem.value;
@@ -1116,34 +1122,19 @@ class GameLogic {
         }
     }
 
-    spawnGems() {
+    spawnHealItems() {
         this.gems = [];
         this.nextGemId = 0;
-        this.initialStateDirty = true;
 
-        const shuffledCells = shuffle(LEVEL.gemCells.slice());
-        const spawnQueue = [];
-        Object.entries(GEM_COUNTS).forEach(([type, count]) => {
-            for (let i = 0; i < count; i++) {
-                spawnQueue.push(type);
-            }
-        });
-
-        // Optionally replace some spawn slots with heal powerups
-        for (let i = 0; i < spawnQueue.length && i < shuffledCells.length; i++) {
-            let type = spawnQueue[i];
-            if (Math.random() < HEAL_POWERUP_PROBABILITY) {
-                type = 'heal_powerup';
-            }
-            const cell = shuffledCells[i];
+        for (const point of HEAL_SPAWN_POINTS) {
             this.gems.push({
-                id: `G${String(this.nextGemId++).padStart(3, '0')}`,
-                type,
-                x: cell.x,
-                y: cell.y,
-                width: GEM_WIDTH,
-                height: GEM_HEIGHT,
-                value: GEM_VALUES[type] || 1,
+                id: `H${String(this.nextGemId++).padStart(3, '0')}`,
+                type: 'heal',
+                x: point.x,
+                y: point.y,
+                width: HEAL_ITEM_WIDTH,
+                height: HEAL_ITEM_HEIGHT,
+                value: HEAL_AMOUNT,
                 visible: true
             });
         }

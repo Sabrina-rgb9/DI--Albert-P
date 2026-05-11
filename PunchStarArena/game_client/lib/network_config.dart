@@ -1,14 +1,18 @@
 enum ServerOption { local, remote }
 
 class NetworkConfig {
-  static const String remoteServer = 'pico3.ieti.site'; // cambia aquí la URL de Proxmox/servidor remoto
+  static const String remoteServer = 'ccarrillocrespo.ieti.site';
 
   final ServerOption serverOption;
   final String playerName;
-  const NetworkConfig({required this.serverOption, required this.playerName});
+
+  const NetworkConfig({
+    required this.serverOption,
+    required this.playerName,
+  });
 
   static const NetworkConfig defaults = NetworkConfig(
-    serverOption: ServerOption.local,
+    serverOption: ServerOption.remote,
     playerName: 'Astronauta',
   );
 

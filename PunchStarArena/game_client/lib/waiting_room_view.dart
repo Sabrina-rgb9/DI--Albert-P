@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'app_data.dart';
@@ -27,19 +26,19 @@ class _WaitingRoomBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int countdown = appData.countdownSeconds;
-    final bool countingDown = countdown > 0 &&
-        appData.phase == MatchPhase.waiting;
-    final List<MultiplayerPlayer> players = List<MultiplayerPlayer>.from(
-      appData.players,
-    )..sort(
-      (MultiplayerPlayer a, MultiplayerPlayer b) =>
-          a.joinOrder.compareTo(b.joinOrder),
-    );
+    final bool countingDown =
+        countdown > 0 && appData.phase == MatchPhase.waiting;
+
+    final List<MultiplayerPlayer> players =
+        List<MultiplayerPlayer>.from(appData.players)
+          ..sort(
+            (MultiplayerPlayer a, MultiplayerPlayer b) =>
+                a.joinOrder.compareTo(b.joinOrder),
+          );
 
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        // Background
         Transform(
           alignment: Alignment.center,
           transform: Matrix4.identity()
@@ -50,137 +49,88 @@ class _WaitingRoomBody extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        // Dark overlay
-        Container(color: Colors.black.withValues(alpha: 0.45)),
-        // Content
+
+        Container(color: Colors.black.withValues(alpha: 0.38)),
+
         Column(
           children: <Widget>[
-            const SizedBox(height: 32),
-            // Title
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Text(
-                  'Waiting Room',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 52,
-                    fontWeight: FontWeight.bold,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 6
-                      ..color = Colors.yellow,
-                  ),
-                ),
-                const Text(
-                  'Waiting Room',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 52,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(height: 36),
+
+        const Text(
+          'Sala de espera',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 38,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFFF1F5F9),
+            letterSpacing: 0.2,
+            decoration: TextDecoration.none,
+          ),
+        ),
+
             const SizedBox(height: 16),
-            // Countdown area
+
             SizedBox(
               height: 100,
               child: Center(
                 child: countingDown
-                    ? Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          Text(
-                            '$countdown',
-                            style: TextStyle(
-                              fontSize: 80,
-                              fontWeight: FontWeight.bold,
-                              foreground: Paint()
-                                ..style = PaintingStyle.stroke
-                                ..strokeWidth = 5
-                                ..color = Colors.orange,
-                            ),
-                          ),
-                          Text(
-                            '$countdown',
-                            style: const TextStyle(
-                              fontSize: 80,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                    ? Text(
+                        '$countdown',
+                        style: const TextStyle(
+                          fontSize: 74,
+                          fontWeight: FontWeight.w300,
+                          color: Color(0xFFE2E8F0),
+                          letterSpacing: 0,
+                        ),
                       )
                     : null,
               ),
             ),
+
             const SizedBox(height: 24),
-            // Main panel: controls image + player list
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    // Left: controls image
-                    Expanded(
-                      child: _Panel(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Image.asset(
-                            'assets/media/controls.png',
-                            fit: BoxFit.contain,
+                child: _Panel(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        const Text(
+                          'Jugadores conectados',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFFF8FAFC),
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none,
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                    // Right: player list
-                    Expanded(
-                      child: _Panel(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              const Text(
-                                'Astronautas',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Expanded(
-                                child: ListView.separated(
-                                  itemCount: players.length,
-                                  separatorBuilder:
-                                      (BuildContext ctx, int idx) =>
-                                          const Divider(
-                                            color: Colors.white24,
-                                            height: 1,
-                                          ),
-                                  itemBuilder:
-                                      (BuildContext ctx, int idx) =>
-                                          _PlayerRow(
-                                            key: ValueKey<String>(players[idx].id),
-                                            player: players[idx],
-                                            isLocal:
-                                                players[idx].id ==
-                                                appData.playerId,
-                                          ),
-                                ),
-                              ),
-                            ],
+
+                        const SizedBox(height: 12),
+
+                        Expanded(
+                          child: ListView.separated(
+                            itemCount: players.length,
+                            separatorBuilder:
+                                (BuildContext ctx, int idx) =>
+                                  Divider(
+                                    color: Colors.white.withValues(alpha: 0.05),
+                                    height: 1,
+                                  ),
+                            itemBuilder: (BuildContext ctx, int idx) =>
+                                _PlayerRow(
+                              key: ValueKey<String>(players[idx].id),
+                              player: players[idx],
+                              isLocal: players[idx].id == appData.playerId,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -199,11 +149,14 @@ class _Panel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white24),
+    decoration: BoxDecoration(
+      color: Colors.black.withValues(alpha: 0.42),
+      borderRadius: BorderRadius.circular(18),
+      border: Border.all(
+        color: Colors.white.withValues(alpha: 0.08),
+        width: 1,
       ),
+    ),
       child: child,
     );
   }
@@ -213,7 +166,11 @@ class _PlayerRow extends StatelessWidget {
   final MultiplayerPlayer player;
   final bool isLocal;
 
-  const _PlayerRow({super.key, required this.player, required this.isLocal});
+  const _PlayerRow({
+    super.key,
+    required this.player,
+    required this.isLocal,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -223,25 +180,34 @@ class _PlayerRow extends StatelessWidget {
         children: <Widget>[
           Icon(
             Icons.person,
-            color: isLocal ? Colors.yellow : Colors.white70,
-            size: 20,
-          ),
+            color: isLocal
+            ? const Color(0xFFE2E8F0)
+            : Colors.white.withValues(alpha: 0.55),
+                    size: 20,
+                  ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               player.name,
               style: TextStyle(
-                color: isLocal ? Colors.yellow : Colors.white,
-                fontSize: 16,
-                fontWeight:
-                    isLocal ? FontWeight.bold : FontWeight.normal,
+                color: isLocal
+                  ? const Color(0xFFF8FAFC)
+                  : Colors.white.withValues(alpha: 0.82),
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              decoration: TextDecoration.none,
               ),
             ),
           ),
           if (isLocal)
             const Text(
               '(tú)',
-              style: TextStyle(color: Colors.yellow, fontSize: 13),
+              style: TextStyle(
+              color: Color(0xFFCBD5E1),
+              fontSize: 12,
+              fontWeight: FontWeight.w300,
+              decoration: TextDecoration.none,
+              ),
             ),
         ],
       ),

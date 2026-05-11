@@ -120,6 +120,8 @@ class PlayScreen extends ScreenAdapter {
     _renderGems(batch, appData.gems);
     _renderAstronautas(batch, appData.sortedPlayers, appData.playerId);
     batch.end();
+
+    _renderHealItems(appData.gems);
     _renderPlayerOverlays(appData.sortedPlayers, appData.playerId);
     if (_showDebugOverlay) {
       debugOverlay.render(
@@ -217,6 +219,10 @@ class PlayScreen extends ScreenAdapter {
 
   void _renderGems(SpriteBatch batch, List<MultiplayerGem> gems) {
     for (final MultiplayerGem gem in gems) {
+      if (gem.type == 'heal') {
+        continue;
+      }
+
       final LevelSprite template =
           gemTemplateByType[gem.type] ?? gemTemplateByType['green']!;
       final _AnimatedSpriteFrame frame = _frameFromTemplate(template);
@@ -228,6 +234,44 @@ class PlayScreen extends ScreenAdapter {
         width: gem.width,
         height: gem.height,
       );
+    }
+  }
+
+  void _renderHealItems(List<MultiplayerGem> gems) {
+    final ShapeRenderer shapes = game.getShapeRenderer();
+
+    for (final MultiplayerGem gem in gems) {
+      if (gem.type != 'heal') {
+        continue;
+      }
+
+      final ui.Rect rect = viewport.worldToScreenRect(
+        gem.x,
+        gem.y,
+        gem.width,
+        gem.height,
+      );
+
+      shapes.begin(ShapeType.filled);
+
+      shapes.setColor(colorValueOf('F8FAFC'));
+      shapes.rect(rect.left, rect.top, rect.width, rect.height);
+
+      shapes.setColor(colorValueOf('EF4444'));
+      shapes.rect(
+        rect.left + rect.width * 0.4,
+        rect.top + rect.height * 0.18,
+        rect.width * 0.2,
+        rect.height * 0.64,
+      );
+      shapes.rect(
+        rect.left + rect.width * 0.18,
+        rect.top + rect.height * 0.4,
+        rect.width * 0.64,
+        rect.height * 0.2,
+      );
+
+      shapes.end();
     }
   }
 
@@ -268,9 +312,7 @@ class PlayScreen extends ScreenAdapter {
     final ShapeRenderer shapes = game.getShapeRenderer();
     shapes.begin(ShapeType.line);
     shapes.setColor(localPlayerColor);
-    shapes.circle(center.dx, center.dy, radius, 24);
     shapes.setColor(colorValueOf('FFE07A88'));
-    shapes.circle(center.dx, center.dy, math.max(4, radius - 3), 24);
     shapes.end();
   }
 
