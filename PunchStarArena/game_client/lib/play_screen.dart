@@ -121,7 +121,6 @@ class PlayScreen extends ScreenAdapter {
     _renderAstronautas(batch, appData.sortedPlayers, appData.playerId);
     batch.end();
 
-    _renderHealItems(appData.gems);
     _renderPlayerOverlays(appData.sortedPlayers, appData.playerId);
     if (_showDebugOverlay) {
       debugOverlay.render(
@@ -220,6 +219,7 @@ class PlayScreen extends ScreenAdapter {
   void _renderGems(SpriteBatch batch, List<MultiplayerGem> gems) {
     for (final MultiplayerGem gem in gems) {
       if (gem.type == 'heal') {
+        _drawHealItem(batch, gem);
         continue;
       }
 
@@ -237,44 +237,69 @@ class PlayScreen extends ScreenAdapter {
     }
   }
 
-  void _renderHealItems(List<MultiplayerGem> gems) {
-    final ShapeRenderer shapes = game.getShapeRenderer();
-
-    shapes.begin(ShapeType.filled);
-
-    for (final MultiplayerGem gem in gems) {
-
-      if (gem.type != 'heal') {
-        continue;
-      }
-
-      final ui.Rect rect = viewport.worldToScreenRect(
-        gem.x,
-        gem.y,
-        gem.width,
-        gem.height,
-      );
-
-      shapes.setColor(colorValueOf('F8FAFC'));
-      shapes.rect(rect.left, rect.top, rect.width, rect.height);
-
-      shapes.setColor(colorValueOf('EF4444'));
-      shapes.rect(
-        rect.left + rect.width * 0.4,
-        rect.top + rect.height * 0.18,
-        rect.width * 0.2,
-        rect.height * 0.64,
-      );
-      shapes.rect(
-        rect.left + rect.width * 0.18,
-        rect.top + rect.height * 0.4,
-        rect.width * 0.64,
-        rect.height * 0.2,
-      );
+  void _drawHealItem(SpriteBatch batch, MultiplayerGem gem) {
+    if (!game.getAssetManager().isLoaded('levels/media/heal_bar_2.png', Texture)) {
+      return;
     }
 
-    shapes.end();
+    final Texture texture =
+        game.getAssetManager().get('levels/media/heal_bar_2.png', Texture);
+
+    final ui.Rect dst = viewport.worldToScreenRect(
+      gem.x,
+      gem.y,
+      gem.width,
+      gem.height,
+    );
+
+    final ui.Rect src = ui.Rect.fromLTWH(
+      0,
+      0,
+      texture.width.toDouble(),
+      texture.height.toDouble(),
+    );
+
+    batch.drawRegion(texture, src, dst);
   }
+
+  // void _renderHealItems(List<MultiplayerGem> gems) {
+  //   final ShapeRenderer shapes = game.getShapeRenderer();
+
+  //   shapes.begin(ShapeType.filled);
+
+  //   for (final MultiplayerGem gem in gems) {
+
+  //     if (gem.type != 'heal') {
+  //       continue;
+  //     }
+
+  //     final ui.Rect rect = viewport.worldToScreenRect(
+  //       gem.x,
+  //       gem.y,
+  //       gem.width,
+  //       gem.height,
+  //     );
+
+  //     shapes.setColor(colorValueOf('F8FAFC'));
+  //     shapes.rect(rect.left, rect.top, rect.width, rect.height);
+
+  //     shapes.setColor(colorValueOf('EF4444'));
+  //     shapes.rect(
+  //       rect.left + rect.width * 0.4,
+  //       rect.top + rect.height * 0.18,
+  //       rect.width * 0.2,
+  //       rect.height * 0.64,
+  //     );
+  //     shapes.rect(
+  //       rect.left + rect.width * 0.18,
+  //       rect.top + rect.height * 0.4,
+  //       rect.width * 0.64,
+  //       rect.height * 0.2,
+  //     );
+  //   }
+
+  //   shapes.end();
+  // }
 
   void _drawAnimatedSprite(
     SpriteBatch batch, {
