@@ -347,42 +347,52 @@ class PlayScreen extends ScreenAdapter {
     final ShapeRenderer shapes = game.getShapeRenderer();
     final double screenWidth = Gdx.graphics.getWidth().toDouble();
     final double screenHeight = Gdx.graphics.getHeight().toDouble();
+
     shapes.begin(ShapeType.filled);
-    shapes.setColor(winnerOverlayColor);
+    shapes.setColor(colorValueOf('00000099'));
     shapes.rect(0, 0, screenWidth, screenHeight);
+
+    final double boxWidth = 420;
+    final double boxHeight = 150;
+    final double boxX = (screenWidth - boxWidth) / 2;
+    final double boxY = (screenHeight - boxHeight) / 2;
+
+    shapes.setColor(colorValueOf('111827CC'));
+    shapes.rect(boxX, boxY, boxWidth, boxHeight);
     shapes.end();
 
     final MultiplayerPlayer? winner = appData.sortedPlayers.isEmpty
         ? null
         : appData.sortedPlayers.first;
-    final String title = winner == null
-        ? 'Match Finished'
-        : '${winner.name} wins!';
-    final String subtitle = winner == null
-        ? ''
-        : '${winner.stocks} stock${winner.stocks == 1 ? '' : 's'} remaining · ${winner.damage}% damage';
+
+    final String title = winner == null ? 'Partida finalizada' : 'Victoria';
+    final String subtitle = winner == null ? '' : winner.name;
 
     final SpriteBatch batch = game.getBatch();
     final BitmapFont font = game.getFont();
+
     batch.begin();
+
     _drawCenteredText(
       batch,
       font,
       title,
-      screenHeight * 0.46,
-      2.2,
-      titleColor,
-      maxWidth: screenWidth - leaderboardWidth,
+      screenHeight * 0.47,
+      1.55,
+      colorValueOf('F8FAFC'),
+      maxWidth: screenWidth,
     );
+
     _drawCenteredText(
       batch,
       font,
       subtitle,
-      screenHeight * 0.53,
-      1.15,
-      textColor,
-      maxWidth: screenWidth - leaderboardWidth,
+      screenHeight * 0.54,
+      1.05,
+      colorValueOf('CBD5E1'),
+      maxWidth: screenWidth,
     );
+
     batch.end();
   }
 
