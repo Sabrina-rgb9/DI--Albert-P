@@ -97,8 +97,8 @@
       "groupId": "__main__"
     },
     {
-      "name": "space_platforms",
-      "fileName": "media/Space_Platform_Tiles.png",
+      "name": "platforms",
+      "fileName": "media/Space Arenaese_Wall_Set.png",
       "mediaType": "tileset",
       "tileWidth": 32,
       "tileHeight": 32,

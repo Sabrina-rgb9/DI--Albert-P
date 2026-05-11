@@ -91,7 +91,7 @@ test -f package.json
 npm install --omit=dev
 
 # Start app with global pm2
-pm2 start server/app.js --name app --update-env
+pm2 start app.js
 pm2 save
 
 echo "✔️  Deploy correcte. Estat PM2:"

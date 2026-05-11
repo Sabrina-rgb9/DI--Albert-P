@@ -15,7 +15,7 @@ loadEnvFiles([
 const debug = process.env.DEBUG_WS === '1';
 const port = Number.parseInt(String(process.env.PORT || '3000').trim(), 10) || 3000;
 const adminPassword = String(process.env.WEB_ADMIN_PASSWORD || '').trim();
-const publicDir = path.resolve(__dirname, '..', 'public');
+const publicDir = path.resolve(__dirname, 'public');
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
