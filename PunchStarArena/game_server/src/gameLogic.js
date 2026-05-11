@@ -57,11 +57,12 @@ const PLAYER_TEMPLATE = findPlayerTemplate(LEVEL.sprites);
 const GEM_TEMPLATE_BY_TYPE = buildGemTemplateMap(LEVEL.sprites);
 
 // Heal item properties.
-const HEAL_ITEM_WIDTH = 18;
-const HEAL_ITEM_HEIGHT = 18;
-const HEAL_AMOUNT = 35;
-const HEAL_RESPAWN_MS = 12000;
+const HEAL_ITEM_WIDTH = 18; // tamaño del powerup de curación (cuadrado)
+const HEAL_ITEM_HEIGHT = 18; // cantidad de curación que otorga el powerup
+const HEAL_AMOUNT = 35; // cantidad de curación que otorga el powerup
+const HEAL_RESPAWN_MS = 12000; // tiempo que tarda en reaparecer un powerup de curación después de ser recogido
 
+// posibles puntos de aparicion
 const HEAL_SPAWN_POINTS = [
     { x: 260, y: 392 },
     { x: 640, y: 302 },
@@ -69,7 +70,7 @@ const HEAL_SPAWN_POINTS = [
     { x: 430, y: 502 },
     { x: 850, y: 502 },
 ];
-// Chance (per spawn slot) to turn a gem into a heal powerup (0.0 - 1.0)
+// Chance (per spawn slot) to turn a heal into a heal powerup (0.0 - 1.0)
 const HEAL_POWERUP_PROBABILITY = 0.05;
 
 // Main game server logic class.
@@ -96,7 +97,7 @@ class GameLogic {
 
         // Active gems/heal items on the map.
         this.gems = [];
-        this.healRespawnTimeout = null;
+        this.healRespawnTimeout = null; // control de reaparición de powerups de curación
 
         // State dirty flag for snapshot polling.
         this.initialStateDirty = true;
@@ -1174,22 +1175,24 @@ class GameLogic {
 
     // Check whether the player touched any gems or heal items.
     // Applies item effects and removes collected items from the map.
+    // detecta si un jugador toca la cura
     collectTouchedGems(player) {
         const remainingGems = [];
 
         for (const gem of this.gems) {
             let collected = false;
 
+            // comprobamos la colision entre el jugador y la cura, si hay colision aplicamos el efecto de la cura al jugador y no añadimos la cura a remainingGems, lo que hace que desaparezca del mapa
             if (
                 rectsOverlap(
-                    this.playerCollisionRect(player),
+                    this.playerCollisionRect(player), 
                     this.gemCollisionRect(gem)
                 )
             ) {
                 const t = String(gem.type || '').toLowerCase();
 
                 if (t.includes('heal')) {
-                    player.damage = Math.max(0, player.damage - HEAL_AMOUNT);
+                    player.damage = Math.max(0, player.damage - HEAL_AMOUNT); //aplicamos la cura
                     player.hurtTimer = 0;
                     player.gemsCollected += 1;
                     collected = true;
@@ -1201,14 +1204,14 @@ class GameLogic {
             }
         }
 
-        this.gems = remainingGems;
+        this.gems = remainingGems; // eliminamos las curas recogidas del mapa
 
         if (
             this.gems.length === 0 &&
             this.phase === 'playing' &&
             !this.healRespawnTimeout
         ) {
-            this.healRespawnTimeout = setTimeout(() => {
+            this.healRespawnTimeout = setTimeout(() => { // reaparece 
                 this.spawnHealItems();
                 this.healRespawnTimeout = null;
             }, HEAL_RESPAWN_MS);
@@ -1217,12 +1220,14 @@ class GameLogic {
 
     // Spawn a heal item on a random heal spawn point.
     // This is currently the only active item type in the match.
+    // creamos la cura 
     spawnHealItems() {
         const point =
             HEAL_SPAWN_POINTS[
-                Math.floor(Math.random() * HEAL_SPAWN_POINTS.length)
+                Math.floor(Math.random() * HEAL_SPAWN_POINTS.length) // HEAL_SPAWN_POINTS.length
             ];
 
+        // lo que recibe el cliente 
         this.gems = [
             {
                 id: 'heal_001',
