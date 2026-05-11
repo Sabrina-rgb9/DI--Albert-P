@@ -240,28 +240,12 @@ class PlayScreen extends ScreenAdapter {
   void _drawHealItem(SpriteBatch batch, MultiplayerGem gem) {
     const String texturePath = 'levels/media/heal_bar_2.png';
 
-    if (game.getAssetManager().isLoaded(texturePath, Texture)) {
-      final Texture texture = game.getAssetManager().get(texturePath, Texture);
-
-      final ui.Rect dst = viewport.worldToScreenRect(
-        gem.x,
-        gem.y,
-        gem.width,
-        gem.height,
-      );
-
-      final ui.Rect src = ui.Rect.fromLTWH(
-        0,
-        0,
-        texture.width.toDouble(),
-        texture.height.toDouble(),
-      );
-
-      batch.drawRegion(texture, src, dst);
+    if (!game.getAssetManager().isLoaded(texturePath, Texture)) {
       return;
     }
 
-    // Fallback temporal: si ves esto, el heal existe pero la imagen no está cargada.
+    final Texture texture = game.getAssetManager().get(texturePath, Texture);
+
     final ui.Rect dst = viewport.worldToScreenRect(
       gem.x,
       gem.y,
@@ -269,31 +253,14 @@ class PlayScreen extends ScreenAdapter {
       gem.height,
     );
 
-    batch.end();
-
-    final ShapeRenderer shapes = game.getShapeRenderer();
-    shapes.begin(ShapeType.filled);
-
-    shapes.setColor(colorValueOf('F8FAFC'));
-    shapes.rect(dst.left, dst.top, dst.width, dst.height);
-
-    shapes.setColor(colorValueOf('EF4444'));
-    shapes.rect(
-      dst.left + dst.width * 0.4,
-      dst.top + dst.height * 0.18,
-      dst.width * 0.2,
-      dst.height * 0.64,
-    );
-    shapes.rect(
-      dst.left + dst.width * 0.18,
-      dst.top + dst.height * 0.4,
-      dst.width * 0.64,
-      dst.height * 0.2,
+    final ui.Rect src = ui.Rect.fromLTWH(
+      0,
+      0,
+      texture.width.toDouble(),
+      texture.height.toDouble(),
     );
 
-    shapes.end();
-
-    batch.begin();
+    batch.drawRegion(texture, src, dst);
   }
 
   // void _renderHealItems(List<MultiplayerGem> gems) {

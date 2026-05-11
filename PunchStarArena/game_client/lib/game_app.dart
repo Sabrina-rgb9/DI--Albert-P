@@ -82,6 +82,7 @@ class GameApp extends Game {
       }
     }
     assetManager.load('other/enrrere.png', Texture);
+    assetManager.load('levels/media/heal_bar_2.png', Texture);
   }
 
   @override
