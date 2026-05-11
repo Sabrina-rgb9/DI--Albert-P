@@ -1097,42 +1097,47 @@ class GameLogic {
     }
 
     collectTouchedGems(player) {
+        const remainingGems = [];
+
         for (const gem of this.gems) {
-            if (!gem.visible) {
-                continue;
-            }
-            if (rectsOverlap(
-                this.playerCollisionRect(player),
-                this.gemCollisionRect(gem)
-            )) {
+            let collected = false;
+
+            if (
+                rectsOverlap(
+                    this.playerCollisionRect(player),
+                    this.gemCollisionRect(gem)
+                )
+            ) {
                 const t = String(gem.type || '').toLowerCase();
+
                 if (t.includes('heal')) {
                     player.damage = Math.max(0, player.damage - HEAL_AMOUNT);
                     player.hurtTimer = 0;
                     player.gemsCollected += 1;
-
-                    this.gems = this.gems.filter(g => g.id !== gem.id);
+                    collected = true;
                 }
             }
+
+            if (!collected) {
+                remainingGems.push(gem);
+            }
         }
+
+        this.gems = remainingGems;
     }
 
     spawnHealItems() {
-        this.gems = [];
-        this.nextGemId = 0;
-
-        for (const point of HEAL_SPAWN_POINTS) {
-            this.gems.push({
-                id: `H${String(this.nextGemId++).padStart(3, '0')}`,
+        this.gems = [
+            {
+                id: 'heal_001',
                 type: 'heal',
-                x: point.x,
-                y: point.y,
+                x: HEAL_SPAWN_POINTS[0].x,
+                y: HEAL_SPAWN_POINTS[0].y,
                 width: HEAL_ITEM_WIDTH,
                 height: HEAL_ITEM_HEIGHT,
-                value: HEAL_AMOUNT,
-                visible: true
-            });
-        }
+                value: HEAL_AMOUNT
+            }
+        ];
     }
 
     playerOverlapsAnyZone(player, zoneIndices) {
