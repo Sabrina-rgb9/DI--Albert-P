@@ -243,6 +243,7 @@ class PlayScreen extends ScreenAdapter {
     shapes.begin(ShapeType.filled);
 
     for (final MultiplayerGem gem in gems) {
+
       if (gem.type != 'heal') {
         continue;
       }

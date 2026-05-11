@@ -56,12 +56,7 @@ const HEAL_ITEM_HEIGHT = 18;
 const HEAL_AMOUNT = 35;
 
 const HEAL_SPAWN_POINTS = [
-    { x: 260, y: 392 },
-    { x: 630, y: 302 },
-    { x: 1020, y: 392 },
-    { x: 430, y: 502 },
-    { x: 640, y: 502 },
-    { x: 850, y: 502 },
+    { x: 640, y: 302 },
 ];
 // Chance (per spawn slot) to turn a gem into a heal powerup (0.0 - 1.0)
 const HEAL_POWERUP_PROBABILITY = 0.05;
@@ -1115,11 +1110,9 @@ class GameLogic {
                     player.damage = Math.max(0, player.damage - HEAL_AMOUNT);
                     player.hurtTimer = 0;
                     player.gemsCollected += 1;
-                } else {
-                    player.score += gem.value;
-                    player.gemsCollected += 1;
+
+                    this.gems = this.gems.filter(g => g.id !== gem.id);
                 }
-                gem.visible = false;
             }
         }
     }
