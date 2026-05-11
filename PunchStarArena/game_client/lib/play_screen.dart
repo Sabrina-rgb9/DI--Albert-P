@@ -240,6 +240,8 @@ class PlayScreen extends ScreenAdapter {
   void _renderHealItems(List<MultiplayerGem> gems) {
     final ShapeRenderer shapes = game.getShapeRenderer();
 
+    shapes.begin(ShapeType.filled);
+
     for (final MultiplayerGem gem in gems) {
       if (gem.type != 'heal') {
         continue;
@@ -251,8 +253,6 @@ class PlayScreen extends ScreenAdapter {
         gem.width,
         gem.height,
       );
-
-      shapes.begin(ShapeType.filled);
 
       shapes.setColor(colorValueOf('F8FAFC'));
       shapes.rect(rect.left, rect.top, rect.width, rect.height);
@@ -270,9 +270,9 @@ class PlayScreen extends ScreenAdapter {
         rect.width * 0.64,
         rect.height * 0.2,
       );
-
-      shapes.end();
     }
+
+    shapes.end();
   }
 
   void _drawAnimatedSprite(
