@@ -54,9 +54,14 @@ const GEM_TEMPLATE_BY_TYPE = buildGemTemplateMap(LEVEL.sprites);
 const HEAL_ITEM_WIDTH = 18;
 const HEAL_ITEM_HEIGHT = 18;
 const HEAL_AMOUNT = 35;
+const HEAL_RESPAWN_MS = 12000;
 
 const HEAL_SPAWN_POINTS = [
+    { x: 260, y: 392 },
     { x: 640, y: 302 },
+    { x: 1020, y: 392 },
+    { x: 430, y: 502 },
+    { x: 850, y: 502 },
 ];
 // Chance (per spawn slot) to turn a gem into a heal powerup (0.0 - 1.0)
 const HEAL_POWERUP_PROBABILITY = 0.05;
@@ -71,6 +76,7 @@ class GameLogic {
         this.lobbyEndsAt = null;
         this.winnerId = '';
         this.gems = [];
+        this.healRespawnTimeout = null;
         this.initialStateDirty = true;
         this.rematchPool = new Set();
         this.rematchLobbyEndsAt = null;
@@ -1124,15 +1130,31 @@ class GameLogic {
         }
 
         this.gems = remainingGems;
+
+        if (
+            this.gems.length === 0 &&
+            this.phase === 'playing' &&
+            !this.healRespawnTimeout
+        ) {
+            this.healRespawnTimeout = setTimeout(() => {
+                this.spawnHealItems();
+                this.healRespawnTimeout = null;
+            }, HEAL_RESPAWN_MS);
+        }
     }
 
     spawnHealItems() {
+        const point =
+            HEAL_SPAWN_POINTS[
+                Math.floor(Math.random() * HEAL_SPAWN_POINTS.length)
+            ];
+
         this.gems = [
             {
                 id: 'heal_001',
                 type: 'heal',
-                x: HEAL_SPAWN_POINTS[0].x,
-                y: HEAL_SPAWN_POINTS[0].y,
+                x: point.x,
+                y: point.y,
                 width: HEAL_ITEM_WIDTH,
                 height: HEAL_ITEM_HEIGHT,
                 value: HEAL_AMOUNT
