@@ -16,13 +16,20 @@ import javafx.scene.text.TextAlignment;
 
 public class ControllerMobile2 {
 
+    // Root pane of the mobile detail screen.
     @FXML
     private AnchorPane rootPaneMobile2;
+
+    // Circle used to display the color value for character/console details.
     @FXML
     private Circle circle;
+
+    // Container where the detail content is inserted dynamically.
     @FXML
     private VBox mainScreen;
 
+    // Called automatically after the FXML is loaded.
+    // Sets up a listener to switch to desktop view on wide windows.
     public void initialize() {
         try {
             rootPaneMobile2.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -37,9 +44,11 @@ public class ControllerMobile2 {
         }
     }
 
+    // Update the detail screen with data from the selected JSON object.
+    // The urlImage parameter points to the image asset to show for the selection.
     @FXML
     public void updateMainScreen(JSONObject jsonObject, String urlImage) {
-        // Limpiar elementos de mainScreen
+        // Clear previous detail content.
         mainScreen.getChildren().clear();
 
         // Preparar imagen
@@ -54,6 +63,10 @@ public class ControllerMobile2 {
             e.printStackTrace();
         }
 
+        // Identify what type of object is being shown:
+        // character entries have a "game" field,
+        // consoles have a "procesador" field,
+        // games have a "plot" field.
         boolean isCharacter = jsonObject.has("game");
         boolean isConsole = jsonObject.has("procesador");
         boolean isGame = jsonObject.has("plot");
@@ -123,6 +136,7 @@ public class ControllerMobile2 {
         }
     }
 
+    // Navigate back to the mobile list screen.
     @FXML
     private void toViewMobile1() {
         UtilsViews.setView("viewMobile1");

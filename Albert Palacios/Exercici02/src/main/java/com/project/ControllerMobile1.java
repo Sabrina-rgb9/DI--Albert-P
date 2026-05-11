@@ -17,13 +17,21 @@ import javafx.scene.layout.VBox;
 
 public class ControllerMobile1 {
 
+    // Root pane for the mobile list and selection screen.
     @FXML
     private AnchorPane rootPaneMobile1;
+
+    // Container used to display the dynamic list of items.
     @FXML
     private VBox yPane;
+
+    // JSON arrays loaded from resources to represent characters, consoles and games.
     private JSONArray jsonInfoCharacters, jsonInfoConsoles, jsonInfoGames;
+
+    // Template resource used to create each list item node.
     private URL resource = this.getClass().getResource("/assets/listItem.fxml");
 
+    // Called after FXML loading to initialize data and event listeners.
     public void initialize() {
         try {
             // Obtener lista Characters
@@ -44,11 +52,9 @@ public class ControllerMobile1 {
             content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
             jsonInfoGames = new JSONArray(content);
 
-            // Listener tamaño ventana
+            // When the mobile view becomes wide enough, switch to the desktop layout.
             rootPaneMobile1.widthProperty().addListener((obs, oldVal, newVal) -> {
-                //System.out.println("rootPaneMobile1.widthProperty=" + newVal);
                 if ((double) newVal > 800) {
-                    //System.out.println("SE ACTIVA LISTENER EN VISTA viewMobile1");
                     UtilsViews.setView("viewDesktop");
                 }
             });
@@ -57,9 +63,10 @@ public class ControllerMobile1 {
         }
     }
 
+    // Build the character list view and add click listeners to each item.
     @FXML
     public void setCharacters() throws Exception {
-        // Borrar contenido listView
+        // Clear previous items from the list container.
         yPane.getChildren().clear();
 
         // Generar la nueva lista a partir de 'jsonInfoCharacters'
@@ -89,21 +96,19 @@ public class ControllerMobile1 {
             // Añadir el nuevo elemento a 'yPane'
             yPane.getChildren().add(itemTemplate);
 
-            // Añadir listener para que al hacer click se actualice la pantalla central
+            // When the item is clicked, show the detail screen for the selected character.
             itemTemplate.setOnMouseClicked(e -> {
-                // Preparar siguiente vista
                 ControllerMobile2 controllerMobile2 = (ControllerMobile2) UtilsViews.getController("viewMobile2");
                 controllerMobile2.updateMainScreen(character, urlImage);
-
-                // Cambiar a la siguiente vista
                 UtilsViews.setView("viewMobile2");
             });
         }
     }
 
+    // Build the console list view and handle console image selection logic.
     @FXML
     public void setConsoles() throws Exception {
-        // Borrar contenido listView
+        // Clear previous items from the list container.
         yPane.getChildren().clear();
 
         // Generar la nueva lista a partir de 'jsonInfoCharacters'
@@ -149,9 +154,10 @@ public class ControllerMobile1 {
         }
     }
 
+    // Build the games list view and handle the image file extension mapping.
     @FXML
     public void setGames() throws Exception {
-        // Borrar contenido listView
+        // Clear previous items from the list container.
         yPane.getChildren().clear();
 
         // Generar la nueva lista a partir de 'jsonInfoCharacters'
@@ -204,6 +210,7 @@ public class ControllerMobile1 {
         }
     }
 
+    // Navigate back to the first mobile selection view.
     @FXML
     private void toViewMobile0() {
         UtilsViews.setView("viewMobile0");

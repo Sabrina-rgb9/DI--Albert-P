@@ -14,10 +14,14 @@ import javafx.util.Duration;
 
 public class UtilsViews {
 
+    // Parent container that holds all the views loaded from FXML files.
     public static StackPane parentContainer = new StackPane();
+
+    // Controllers for each view are stored in the same order as the views are loaded.
     public static ArrayList<Object> controllers = new ArrayList<>();
 
-    // Add one view to the list
+    // Load an FXML view and add it to the shared parent container.
+    // The first view loaded becomes the default visible screen.
     public static void addView(Class<?> cls, String name, String path) throws Exception {
         
         boolean defaultView = false;
@@ -50,17 +54,17 @@ public class UtilsViews {
         return null;
     }
 
-    // Get name of active view
+    // Return the id of the currently visible view.
     public static String getActiveView() {
         for (Node n : parentContainer.getChildren()) {
             if (n.isVisible()) {
                 return n.getId();
             }
         }
-        return null; // No hi ha cap vista activa
+        return null; // No view is active
     }
 
-    // Set visible view by its id (viewId)
+    // Show the view matching viewId and hide all other views.
     public static void setView(String viewId) {
 
         ArrayList<Node> list = new ArrayList<>();
@@ -81,7 +85,7 @@ public class UtilsViews {
         parentContainer.requestFocus();
     }
 
-    // Set visible view by its id (viewId) with an animation
+    // Set visible view by its id (viewId) with an animated transition.
     public static void setViewAnimating(String viewId) {
 
         ArrayList<Node> list = new ArrayList<>();

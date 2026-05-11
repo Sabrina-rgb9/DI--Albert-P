@@ -2,14 +2,16 @@
 
 const { loadMultiplayerLevel } = require('./multiplayerLevelData.js');
 
-// Max players allowed in a single match.
+// Game rules and settings.
+// These constants define how the server simulates gameplay.
+
+// Match state rules.
 const MAX_PLAYERS = 8;
-// Countdown (seconds) shown once 2+ players are in the waiting room.
 const COUNTDOWN_DURATION_MS = 10 * 1000;
-// How long the results screen is shown before returning to REST.
 const RESULTS_DURATION_MS = 10 * 1000;
-// Safety fallback for dt calculation if the measured loop FPS is temporarily unavailable or zero.
 const TARGET_FPS_FALLBACK = 60;
+
+// Player hitbox and movement bounds.
 const PLAYER_WIDTH = 20;
 const PLAYER_HEIGHT = 20;
 const PLAYER_START_X = 460;
@@ -17,7 +19,7 @@ const PLAYER_START_Y = 615;
 const PLAYER_START_STEP_X = 50;
 const PLAYER_START_STEP_Y = 0;
 
-// Horizontal movement
+// Horizontal movement tuning.
 const MOVE_SPEED_PER_SECOND = 260;
 const NORMAL_ACCELERATION_PER_SECOND = 1400;
 const NORMAL_DECELERATION_PER_SECOND = 1600;
@@ -26,13 +28,13 @@ const MOVEMENT_DIRECTION_THRESHOLD = 2;
 const VELOCITY_STOP_THRESHOLD = 0.5;
 const MOVEMENT_EPSILON = 0.0001;
 
-// Platform physics
+// Vertical platform physics.
 const GRAVITY_PER_SECOND = 1300;
 const MAX_FALL_SPEED = 950;
 const JUMP_VELOCITY = -450;
 const MAX_JUMPS = 2;
 
-// Combat
+// Combat and damage system.
 const MAX_STOCKS = 3;
 const ATTACK_DAMAGE = 8;
 const KNOCK_BASE_SPEED = 240;
@@ -42,15 +44,19 @@ const ATTACK_DURATION_S = 0.45;
 const HURT_DURATION_S = 0.35;
 const INVINCIBLE_DURATION_S = 1.8;
 
+// Input direction mapping used to calculate velocity/facing.
 const DIRECTIONS = {
     left: { dx: -1, dy: 0, facing: 'left' },
     right: { dx: 1, dy: 0, facing: 'right' },
     none: { dx: 0, dy: 0, facing: 'none' }
 };
 
+// Load the level data once at server startup.
 const LEVEL = loadMultiplayerLevel();
 const PLAYER_TEMPLATE = findPlayerTemplate(LEVEL.sprites);
 const GEM_TEMPLATE_BY_TYPE = buildGemTemplateMap(LEVEL.sprites);
+
+// Heal item properties.
 const HEAL_ITEM_WIDTH = 18;
 const HEAL_ITEM_HEIGHT = 18;
 const HEAL_AMOUNT = 35;
@@ -66,22 +72,43 @@ const HEAL_SPAWN_POINTS = [
 // Chance (per spawn slot) to turn a gem into a heal powerup (0.0 - 1.0)
 const HEAL_POWERUP_PROBABILITY = 0.05;
 
+// Main game server logic class.
+// Tracks players, match state, environment movement and collision detection.
 class GameLogic {
     constructor() {
+        // Active players in the current match.
+        // Active players in the current match.
         this.players = new Map();
+
+        // Main loop tick counter used to update animation frames and track time.
         this.tickCounter = 0;
+
+        // Join order is used for spawn assignment and ranking ties.
         this.nextJoinOrder = 0;
+
+        // Gem IDs may be assigned as items spawn.
         this.nextGemId = 0;
+
+        // Current phase of the game: 'waiting', 'playing', 'results', 'rest'.
         this.phase = 'waiting';
         this.lobbyEndsAt = null;
         this.winnerId = '';
+
+        // Active gems/heal items on the map.
         this.gems = [];
         this.healRespawnTimeout = null;
+
+        // State dirty flag for snapshot polling.
         this.initialStateDirty = true;
+
+        // Rematch voting state.
         this.rematchPool = new Set();
         this.rematchLobbyEndsAt = null;
+
+        // Players queued for removal after rematch decisions.
         this.kickQueue = [];
 
+        // Runtime state copies for animated layers and zones.
         this.layerRuntimeStates = LEVEL.layers.map((layer) => ({
             x: layer.x,
             y: layer.y
@@ -129,6 +156,8 @@ class GameLogic {
         this.deathZoneIndices = classifyZoneIndices(['death', 'mort', 'muerte'], LEVEL.zones);
     }
 
+    // Add a player to the lobby or current match.
+    // Returns the player state object or null if the match is full or already playing.
     addClient(id) {
         if (this.phase === 'playing') {
             return null;
@@ -191,6 +220,8 @@ class GameLogic {
         return player;
     }
 
+    // Remove a player from the match or lobby.
+    // Also clears them from rematch voting state.
     removeClient(id) {
         this.rematchPool.delete(id);
         this.players.delete(id);
@@ -207,6 +238,8 @@ class GameLogic {
 
     }
 
+    // Handle a message received from a client.
+    // Parses JSON messages and updates player input, registration, or rematch requests.
     handleMessage(id, msg) {
         try {
             const obj = JSON.parse(msg);
@@ -272,6 +305,9 @@ class GameLogic {
         return { stateChanged: false };
     }
 
+    // Main server tick update.
+    // Advances environment animation, processes player physics, handles game state transitions,
+    // and detects win/lose conditions.
     updateGame(fps) {
         if (this.phase === 'results') {
             if (this.resultsEndsAt != null && Date.now() >= this.resultsEndsAt) {
@@ -440,6 +476,8 @@ class GameLogic {
         }
     }
 
+    // Check whether the attacker hit any other players during an active attack.
+    // Applies damage, knockback, hurt state or stock loss on successful hits.
     checkAttackHits(attacker) {
         const clip = LEVEL.animationClips.get(attacker.animationId);
         const hitBoxes = activeHitBoxesForClip(clip, attacker.frameIndex);
@@ -487,6 +525,7 @@ class GameLogic {
         }
     }
 
+    // Choose the correct animation clip based on player state.
     resolveSmashAnimationId(player) {
         if (player.hurtTimer > 0) {
             return resolveAnimationIdByName('hurt') || (PLAYER_TEMPLATE ? PLAYER_TEMPLATE.animationId : '');
@@ -503,6 +542,7 @@ class GameLogic {
         return resolveAnimationIdByName('idle') || (PLAYER_TEMPLATE ? PLAYER_TEMPLATE.animationId : '');
     }
 
+    // Start the rematch countdown if enough players request it.
     _checkRematchCountdown() {
         if (this.rematchPool.size >= 2 && this.rematchLobbyEndsAt == null) {
             this.rematchLobbyEndsAt = Date.now() + COUNTDOWN_DURATION_MS;
@@ -511,6 +551,7 @@ class GameLogic {
         }
     }
 
+    // Reset the lobby for a rematch, removing players who did not vote.
     _startRematchMatch() {
         // Kick players who did not press rematch
         for (const id of this.players.keys()) {
@@ -542,12 +583,15 @@ class GameLogic {
         }
     }
 
+    // Return and clear the list of players that should be removed from the room.
     consumeKickQueue() {
         const queue = this.kickQueue;
         this.kickQueue = [];
         return queue;
     }
 
+    // Respawn a player after losing a stock.
+    // Resets movement and combat state while granting temporary invincibility.
     respawnPlayer(player) {
         const spawn = this.getSpawnPosition(player.joinOrder % MAX_PLAYERS);
         player.x = spawn.x;
@@ -567,6 +611,7 @@ class GameLogic {
         player.frameIndex = resolveClipStartFrame(idleAnimId);
     }
 
+    // Return the initial lobby snapshot once after the state changes.
     consumeSnapshotState() {
         if (!this.initialStateDirty) {
             return null;
@@ -575,6 +620,7 @@ class GameLogic {
         return this.getSnapshotState();
     }
 
+    // Build the lobby snapshot used by clients for match setup.
     getSnapshotState() {
         const players = Array.from(this.players.values()).sort(comparePlayers);
         return {
@@ -590,6 +636,7 @@ class GameLogic {
         };
     }
 
+    // Build the full gameplay state for broadcast to all clients.
     getGameplayState() {
         const players = Array.from(this.players.values()).sort(comparePlayers);
         return {
@@ -601,6 +648,8 @@ class GameLogic {
         };
     }
 
+    // Build a gameplay state tailored for a single player.
+    // This can include the player's own state, other players, and optionally gems.
     getGameplayStateForPlayer(playerId, options = {}) {
         const includeOtherPlayers = options.includeOtherPlayers !== false;
         const includeGems = options.includeGems === true;
@@ -630,6 +679,7 @@ class GameLogic {
         return state;
     }
 
+    // Return a combined snapshot and gameplay state.
     getFullState() {
         return {
             ...this.getSnapshotState(),
@@ -637,6 +687,7 @@ class GameLogic {
         };
     }
 
+    // Build the shared gameplay state fields.
     getGameplayStateBase(players) {
         const countdownSeconds = (this.phase === 'waiting' && this.lobbyEndsAt != null)
             ? Math.max(0, Math.ceil((this.lobbyEndsAt - Date.now()) / 1000))
@@ -667,6 +718,7 @@ class GameLogic {
         };
     }
 
+    // Convert a player object into the serialized gameplay payload format.
     serializeGameplayPlayer(player) {
         return {
             id: player.id,
@@ -685,6 +737,7 @@ class GameLogic {
         };
     }
 
+    // Set game mode to waiting room and prepare the environment.
     startWaitingRoom() {
         this.phase = 'waiting';
         this.winnerId = '';
@@ -697,12 +750,14 @@ class GameLogic {
         this.positionPlayersForStart();
     }
 
+    // Begin the match countdown; used when enough players are present.
     startCountdown() {
         this.lobbyEndsAt = Date.now() + COUNTDOWN_DURATION_MS;
         this.initialStateDirty = true;
         console.log(`Countdown started: match begins in ${COUNTDOWN_DURATION_MS / 1000}s`);
     }
 
+    // Transition from waiting room into active gameplay.
     startMatch() {
         this.phase = 'playing';
         this.winnerId = '';
@@ -717,6 +772,7 @@ class GameLogic {
         }
     }
 
+    // End the current match and enter the results screen state.
     finishMatch() {
         this.phase = 'results';
         this.resultsEndsAt = Date.now() + RESULTS_DURATION_MS;
@@ -725,6 +781,7 @@ class GameLogic {
         console.log(`Match finished. Results shown for ${RESULTS_DURATION_MS / 1000}s.`);
     }
 
+    // Move the server into waiting room state while players remain.
     restartToWaitingRoom() {
         if (this.players.size <= 0) {
             this.resetMatch();
@@ -733,8 +790,8 @@ class GameLogic {
         this.startWaitingRoom();
     }
 
+    // Reset the server into a resting state with no active match.
     resetMatch() {
-        this.phase = 'rest';
         this.lobbyEndsAt = null;
         this.resultsEndsAt = null;
         this.rematchPool.clear();
@@ -746,6 +803,7 @@ class GameLogic {
         console.log('Server back to REST — waiting for players.');
     }
 
+    // Reset dynamic layer/zone runtime positions to the level default.
     resetEnvironmentRuntime() {
         this.pathMotionTimeSeconds = 0;
         this.layerRuntimeStates = LEVEL.layers.map((layer) => ({
@@ -762,6 +820,7 @@ class GameLogic {
         }));
     }
 
+    // Update animated layer/zone movement based on path bindings.
     advanceEnvironment(dtSeconds) {
         for (let i = 0; i < this.zoneRuntimeStates.length; i++) {
             this.zonePreviousRuntimeStates[i].x = this.zoneRuntimeStates[i].x;
@@ -786,6 +845,7 @@ class GameLogic {
         }
     }
 
+    // Apply path-driven movement to layers or zones.
     applyPathTarget(targetType, targetIndex, x, y) {
         if (targetType === 'layer' && this.layerRuntimeStates[targetIndex]) {
             this.layerRuntimeStates[targetIndex].x = x;
@@ -798,6 +858,7 @@ class GameLogic {
         }
     }
 
+    // Get the default starting position for a layer or zone target.
     getInitialTargetPosition(targetType, targetIndex) {
         if (targetType === 'layer' && LEVEL.layers[targetIndex]) {
             return { x: LEVEL.layers[targetIndex].x, y: LEVEL.layers[targetIndex].y };
@@ -808,6 +869,7 @@ class GameLogic {
         return null;
     }
 
+    // Reposition all players at the beginning of a match or waiting room.
     positionPlayersForStart() {
         const players = Array.from(this.players.values()).sort((a, b) => a.joinOrder - b.joinOrder);
         players.forEach((player, index) => {
@@ -815,6 +877,7 @@ class GameLogic {
         });
     }
 
+    // Reset all player input, movement, and combat state before match start.
     resetPlayerForMatch(player, index) {
         const spawn = this.getSpawnPosition(index);
         player.x = spawn.x;
@@ -841,6 +904,7 @@ class GameLogic {
         player.frameIndex = resolveClipStartFrame(idleAnimId);
     }
 
+    // Return one of the predefined spawn positions used for match start.
     getSpawnPosition(index) {
         // Spawns separados para 2-8 jugadores sobre la plataforma central.
         // Así evitamos que dos jugadores aparezcan exactamente encima del otro.
@@ -857,6 +921,7 @@ class GameLogic {
         return spawns[index % spawns.length];
     }
 
+    // Move the player while resolving collisions against wall zones.
     movePlayerWithWallCollisions(player, previousX, previousY, deltaX, deltaY) {
         let currentX = previousX;
         let currentY = previousY;
@@ -912,6 +977,7 @@ class GameLogic {
         }
     }
 
+    // Push the player out of a wall if they become embedded in one.
     resolveWallPenetration(player) {
         if (!this.wouldCollideBlocked(player, player.x, player.y)) {
             return;
@@ -961,6 +1027,7 @@ class GameLogic {
         }
     }
 
+    // If a moving wall is carrying the player, move the player along with it.
     applyMovingWallCarry(player) {
         let bestDeltaMagnitudeSq = 0;
         let carryX = 0;
@@ -1008,6 +1075,7 @@ class GameLogic {
         }
     }
 
+    // Estimate the point along a movement segment where collision first occurs.
     findCollisionTimeOnSegment(player, startX, startY, deltaX, deltaY) {
         if (this.wouldCollideBlocked(player, startX, startY)) {
             return 0;
@@ -1050,6 +1118,8 @@ class GameLogic {
         return high;
     }
 
+    // Estimate the collision normal for a wall contact point.
+    // Used to slide the player along surfaces instead of fully stopping.
     estimateCollisionNormalAt(player, x, y, movementX, movementY) {
         const playerRect = rectAt(x, y, player.width, player.height);
         let bestScore = Number.POSITIVE_INFINITY;
@@ -1102,6 +1172,8 @@ class GameLogic {
         return { x: 0, y: -1 };
     }
 
+    // Check whether the player touched any gems or heal items.
+    // Applies item effects and removes collected items from the map.
     collectTouchedGems(player) {
         const remainingGems = [];
 
@@ -1143,6 +1215,8 @@ class GameLogic {
         }
     }
 
+    // Spawn a heal item on a random heal spawn point.
+    // This is currently the only active item type in the match.
     spawnHealItems() {
         const point =
             HEAL_SPAWN_POINTS[
@@ -1162,6 +1236,7 @@ class GameLogic {
         ];
     }
 
+    // Check whether the player overlaps any of the given zones.
     playerOverlapsAnyZone(player, zoneIndices) {
         for (const zoneIndex of zoneIndices) {
             if (this.collidesWithZoneAt(player, zoneIndex, player.x, player.y)) {
@@ -1171,6 +1246,7 @@ class GameLogic {
         return false;
     }
 
+    // Detect collision between the player and a single zone at a proposed position.
     collidesWithZoneAt(player, zoneIndex, x, y) {
         const zoneRect = this.zoneRectAtIndex(zoneIndex);
         for (const hitBoxRect of this.playerHitBoxRectsAt(player, x, y)) {
@@ -1181,6 +1257,7 @@ class GameLogic {
         return false;
     }
 
+    // Determine whether placing the player at the position would intersect any wall zone.
     wouldCollideBlocked(player, x, y) {
         for (const zoneIndex of this.wallZoneIndices) {
             const zoneRect = this.zoneRectAtIndex(zoneIndex);
@@ -1193,12 +1270,14 @@ class GameLogic {
         return false;
     }
 
+    // Build a rectangle for a zone using current runtime transform.
     zoneRectAtIndex(zoneIndex) {
         const zone = LEVEL.zones[zoneIndex];
         const runtime = this.zoneRuntimeStates[zoneIndex] || zone;
         return rectAt(runtime.x, runtime.y, zone.width, zone.height);
     }
 
+    // Return how far a zone moved horizontally during the last tick.
     zoneDeltaX(zoneIndex) {
         const current = this.zoneRuntimeStates[zoneIndex];
         const previous = this.zonePreviousRuntimeStates[zoneIndex];
@@ -1208,6 +1287,7 @@ class GameLogic {
         return current.x - previous.x;
     }
 
+    // Return how far a zone moved vertically during the last tick.
     zoneDeltaY(zoneIndex) {
         const current = this.zoneRuntimeStates[zoneIndex];
         const previous = this.zonePreviousRuntimeStates[zoneIndex];
@@ -1217,11 +1297,13 @@ class GameLogic {
         return current.y - previous.y;
     }
 
+    // Create a broad hitbox for the player using active frame hitboxes.
     playerCollisionRect(player) {
         const hitBoxes = this.playerHitBoxRectsAt(player, player.x, player.y);
         return unionRects(hitBoxes, rectAt(player.x, player.y, player.width, player.height));
     }
 
+    // Get the active hitboxes for a player at a given position and animation frame.
     playerHitBoxRectsAt(player, x, y) {
         const clip = LEVEL.animationClips.get(player.animationId);
         const hitBoxes = activeHitBoxesForClip(clip, player.frameIndex);
@@ -1233,6 +1315,7 @@ class GameLogic {
         );
     }
 
+    // Calculate the gem's collision bounds from its animation hitboxes.
     gemCollisionRect(gem) {
         const template = GEM_TEMPLATE_BY_TYPE.get(gem.type);
         const clip = template ? LEVEL.animationClips.get(template.animationId) : null;
@@ -1248,6 +1331,7 @@ class GameLogic {
     }
 }
 
+// Build a runtime descriptor for a path so we can sample positions along it.
 function createPathRuntime(path) {
     if (!path || !Array.isArray(path.points) || path.points.length < 2) {
         return null;
@@ -1288,6 +1372,7 @@ function createPathRuntime(path) {
     };
 }
 
+// Sample a position along a precomputed path at a normalized progress value.
 function samplePathAtProgress(pathRuntime, progress) {
     if (!pathRuntime) {
         return { x: 0, y: 0 };
@@ -1310,6 +1395,7 @@ function samplePathAtProgress(pathRuntime, progress) {
     return { x: last.bx, y: last.by };
 }
 
+// Convert elapsed time into a normalized path progress value depending on the path behavior.
 function pathProgressAtTime(behavior, durationSeconds, timeSeconds) {
     if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) {
         return 0;
@@ -1331,6 +1417,7 @@ function pathProgressAtTime(behavior, durationSeconds, timeSeconds) {
     return (t % durationSeconds) / durationSeconds;
 }
 
+// Identify zone indices whose name or type matches any of the provided tokens.
 function classifyZoneIndices(tokens, zones) {
     const indices = [];
     for (let i = 0; i < zones.length; i++) {
@@ -1344,6 +1431,7 @@ function classifyZoneIndices(tokens, zones) {
     return indices;
 }
 
+// Determine a facing direction string from directional inputs.
 function resolveFacing(previousFacing, up, down, left, right) {
     if (up && left) {
         return 'upLeft';
@@ -1372,6 +1460,7 @@ function resolveFacing(previousFacing, up, down, left, right) {
     return previousFacing || 'down';
 }
 
+// Compare players for ranking in lobby and end-of-match screens.
 function comparePlayers(a, b) {
     // More stocks = better rank
     if (b.stocks !== a.stocks) return b.stocks - a.stocks;
@@ -1380,6 +1469,7 @@ function comparePlayers(a, b) {
     return a.joinOrder - b.joinOrder;
 }
 
+// Ensure a player name is safe, trimmed, and no longer than the allowed length.
 function sanitizePlayerName(value, fallback) {
     const name = String(value || '').replace(/\s+/g, ' ').trim();
     if (!name) {
@@ -1388,6 +1478,7 @@ function sanitizePlayerName(value, fallback) {
     return name.substring(0, 18);
 }
 
+// Find a representative player sprite template from the level sprite list.
 function findPlayerTemplate(sprites) {
     for (const sprite of sprites) {
         const type = normalize(sprite.type);
@@ -1400,6 +1491,7 @@ function findPlayerTemplate(sprites) {
     return sprites[0] || null;
 }
 
+// Build lookup table for gem sprite templates by type.
 function buildGemTemplateMap(sprites) {
     const map = new Map();
     for (const sprite of sprites) {
@@ -1417,6 +1509,7 @@ function buildGemTemplateMap(sprites) {
     return map;
 }
 
+// Find an animation clip ID by its name.
 function resolveAnimationIdByName(name) {
     const normalized = normalize(name);
     for (const clip of LEVEL.animationClips.values()) {
@@ -1427,6 +1520,7 @@ function resolveAnimationIdByName(name) {
     return null;
 }
 
+// Compute the current animation frame for a clip based on elapsed time.
 function resolveAnimationFrame(animationId, elapsedSeconds) {
     const clip = LEVEL.animationClips.get(animationId);
     if (!clip) {
@@ -1440,11 +1534,13 @@ function resolveAnimationFrame(animationId, elapsedSeconds) {
     return start + offset;
 }
 
+// Get the first frame index for an animation clip when the animation starts.
 function resolveClipStartFrame(animationId) {
     const clip = LEVEL.animationClips.get(animationId);
     return clip ? Math.max(0, clip.startFrame) : 0;
 }
 
+// Return the active hitboxes for a clip at a frame, preferring frame-specific rigs.
 function activeHitBoxesForClip(clip, frameIndex) {
     if (!clip) {
         return null;
@@ -1459,6 +1555,7 @@ function activeHitBoxesForClip(clip, frameIndex) {
     return null;
 }
 
+// Convert a normalized hitbox into world-space rectangle coordinates.
 function hitBoxRectAt(x, y, width, height, hitBox, flipX, flipY) {
     let normalizedX = hitBox.x;
     let normalizedY = hitBox.y;
@@ -1476,6 +1573,7 @@ function hitBoxRectAt(x, y, width, height, hitBox, flipX, flipY) {
     );
 }
 
+// Combine multiple rectangles into a single bounding box.
 function unionRects(rects, fallback) {
     if (!rects || rects.length <= 0) {
         return fallback;
@@ -1497,11 +1595,13 @@ function unionRects(rects, fallback) {
     return rectAt(minLeft, minTop, maxRight - minLeft, maxBottom - minTop);
 }
 
+// Return a non-negative modulus value.
 function positiveMod(value, divisor) {
     const mod = value % divisor;
     return mod < 0 ? mod + divisor : mod;
 }
 
+// Normalize direction strings into valid movement commands.
 function normalizeDirection(value) {
     const direction = String(value || '').trim();
     return Object.prototype.hasOwnProperty.call(DIRECTIONS, direction)
@@ -1509,6 +1609,7 @@ function normalizeDirection(value) {
         : 'none';
 }
 
+// Create a rectangle object from coordinates and size.
 function rectAt(x, y, width, height) {
     return {
         left: x,
@@ -1520,6 +1621,7 @@ function rectAt(x, y, width, height) {
     };
 }
 
+// Check whether two axis-aligned rectangles overlap.
 function rectsOverlap(a, b) {
     return a.left < b.right &&
         a.right > b.left &&
@@ -1527,6 +1629,7 @@ function rectsOverlap(a, b) {
         a.bottom > b.top;
 }
 
+// Move a value toward a target by at most maxDelta.
 function approach(current, target, maxDelta) {
     if (current < target) {
         return Math.min(current + maxDelta, target);
@@ -1537,6 +1640,7 @@ function approach(current, target, maxDelta) {
     return target;
 }
 
+// Return true if the given text contains any of the needle substrings.
 function containsAny(value, needles) {
     for (const needle of needles) {
         if (needle && value.includes(needle)) {
@@ -1546,22 +1650,27 @@ function containsAny(value, needles) {
     return false;
 }
 
+// Convert a value to normalized lowercase text.
 function normalize(value) {
     return String(value || '').trim().toLowerCase();
 }
 
+// Clamp a number between a minimum and maximum.
 function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
 }
 
+// Linear interpolation between two values.
 function lerp(from, to, alpha) {
     return from + (to - from) * alpha;
 }
 
+// Round a number to two decimal places.
 function round2(value) {
     return Math.round(value * 100) / 100;
 }
 
+// Shuffle an array in place using Fisher-Yates.
 function shuffle(values) {
     for (let i = values.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

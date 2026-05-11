@@ -25,19 +25,33 @@ import javafx.scene.text.TextAlignment;
 
 public class ControllerDesktop {
 
+    // Main desktop container for the desktop layout.
     @FXML
     private AnchorPane rootPaneDesktop;
+
+    // ComboBox used to select the current data category.
     @FXML
     private ComboBox<String> comboBox;
+
+    // Container used to display the list of selectable items.
     @FXML
     private VBox yPane;
+
+    // Circle shown on the detail view for color information.
     @FXML
     private Circle circle;
+
+    // Container holding the detail view content.
     @FXML
     private VBox mainScreen;
+
+    // Loaded JSON data arrays for characters, consoles, and games.
     private JSONArray jsonInfoCharacters, jsonInfoConsoles, jsonInfoGames;
+
+    // Template used to create each list item.
     private URL resource = this.getClass().getResource("/assets/listItem.fxml");
 
+    // Initialize the desktop view: load JSON data, configure ComboBox, and set resizing behavior.
     public void initialize() {
         try {
             // Añade los valores del ComboBox
@@ -70,11 +84,9 @@ public class ControllerDesktop {
             // Actualiza la UI con los valores iniciales de los personajes
             setCharacters();
 
-            // Listener para cambiar de vista según tamaño ventana
+            // When the desktop window becomes narrow, switch to the mobile view.
             rootPaneDesktop.widthProperty().addListener((obs, oldVal, newVal) -> {
-                //System.out.println("rootPaneDesktop.widthProperty=" + newVal);
                 if ((double) newVal < 610) {
-                    //System.out.println("SE ACTIVA LISTENER EN VISTA viewDesktop");
                     UtilsViews.setView("viewMobile0");   
                 }
             });
@@ -86,9 +98,10 @@ public class ControllerDesktop {
 
     }
 
+    // Populate the desktop list with character items.
     @FXML
     private void setCharacters() throws Exception {
-        // Borrar contenido listView
+        // Clear previous items from the list.
         yPane.getChildren().clear();
 
         // Generar la nueva lista a partir de 'jsonInfoCharacters'
@@ -118,16 +131,17 @@ public class ControllerDesktop {
             // Añadir el nuevo elemento a 'yPane'
             yPane.getChildren().add(itemTemplate);
 
-            // Añadir listener para que al hacer click se actualice la pantalla central
+            // When the item is clicked, update the detail screen with character details.
             itemTemplate.setOnMouseClicked(e -> {
                 updateMainScreen(character, urlImage);
             });
         }
     }
 
+    // Populate the desktop list with console items.
     @FXML
     private void setConsoles() throws Exception {
-        // Borrar contenido listView
+        // Clear previous items from the list.
         yPane.getChildren().clear();
 
         // Generar la nueva lista a partir de 'jsonInfoCharacters'
@@ -161,16 +175,17 @@ public class ControllerDesktop {
             // Añadir el nuevo elemento a 'yPane'
             yPane.getChildren().add(itemTemplate);
 
-            // Añadir listener para que al hacer click se actualice la pantalla central
+            // When the item is clicked, update the detail screen with console details.
             itemTemplate.setOnMouseClicked(e -> {
                 updateMainScreen(console, urlImage);
             });
         }
     }
 
+    // Populate the desktop list with game items.
     @FXML
     private void setGames() throws Exception {
-        // Borrar contenido listView
+        // Clear previous items from the list.
         yPane.getChildren().clear();
 
         // Generar la nueva lista a partir de 'jsonInfoCharacters'
@@ -211,13 +226,14 @@ public class ControllerDesktop {
             // Añadir el nuevo elemento a 'yPane'
             yPane.getChildren().add(itemTemplate);
 
-            // Añadir listener para que al hacer click se actualice la pantalla central
+            // When the item is clicked, update the detail screen with game details.
             itemTemplate.setOnMouseClicked(e -> {
                 updateMainScreen(game, urlImage);
             });
         }
     }
 
+    // Handle selection changes in the ComboBox and update the list accordingly.
     @FXML
     private void evaluateComboBoxOption(String option) {
         try {
@@ -237,9 +253,10 @@ public class ControllerDesktop {
         }
     }
 
+    // Display the selected item's details in the main screen panel.
     @FXML
     private void updateMainScreen(JSONObject jsonObject, String urlImage) {
-        // Limpiar elementos de mainScreen
+        // Clear the previous detail content.
         mainScreen.getChildren().clear();
 
         // Preparar imagen
@@ -254,6 +271,7 @@ public class ControllerDesktop {
             e.printStackTrace();
         }
 
+        // Detect what kind of object is displayed so we show the right fields.
         boolean isCharacter = jsonObject.has("game");
         boolean isConsole = jsonObject.has("procesador");
         boolean isGame = jsonObject.has("plot");
