@@ -34,13 +34,21 @@ class PlayerListRenderer {
   );
 
   static const PlayerListStyle gameplayStyle = PlayerListStyle(
-    maxTextScale: 0.96,
-    minTextScale: 0.72,
-    maxRowHeight: 27,
-    minRowHeight: 19,
-    maxCharsAtLowCount: 19,
-    maxCharsAtHighCount: 15,
+    maxTextScale: 0.86,
+    minTextScale: 0.64,
+    maxRowHeight: 46,
+    minRowHeight: 34,
+    maxCharsAtLowCount: 13,
+    maxCharsAtHighCount: 9,
   );
+
+  static final ui.Color cardFill = colorValueOf('10151FCC');
+  static final ui.Color cardBorder = colorValueOf('FFFFFF22');
+  static final ui.Color healthBack = colorValueOf('FFFFFF24');
+  static final ui.Color healthGood = colorValueOf('42F58D');
+  static final ui.Color healthMid = colorValueOf('FFD166');
+  static final ui.Color healthBad = colorValueOf('FF4D6D');
+  static final ui.Color deadColor = colorValueOf('777777');
 
   static void render({
     required SpriteBatch batch,
@@ -76,31 +84,78 @@ class PlayerListRenderer {
     required PlayerListStyle style,
   }) {
     final _PlayerListMetrics metrics = _metrics(players.length, style);
+    final ShapeRenderer shapes = ShapeRenderer();
+
     double rowY = startY;
-    int rank = 1;
+
     for (final MultiplayerPlayer player in players) {
       final bool isLocalPlayer = player.id == localPlayerId;
-      final ui.Color rowColor = isLocalPlayer ? localPlayerColor : textColor;
+      final bool isDead = player.stocks <= 0;
+
+      final double cardX = left;
+      final double cardY = rowY - 18;
+      final double cardW = right - left;
+      final double cardH = metrics.rowHeight - 7;
+
+      shapes.begin(ShapeType.filled);
+      shapes.setColor(cardFill);
+      shapes.rect(cardX, cardY, cardW, cardH);
+      shapes.end();
+
+      shapes.begin(ShapeType.line);
+      shapes.setColor(isLocalPlayer ? localPlayerColor : cardBorder);
+      shapes.rect(cardX, cardY, cardW, cardH);
+      shapes.end();
+
+      final ui.Color nameColor = isDead
+          ? deadColor
+          : isLocalPlayer
+              ? localPlayerColor
+              : textColor;
+
       drawLeftAlignedText(
         batch,
         font,
-        '$rank. ${_truncatePlayerName(player.name, metrics.maxChars)}',
-        left,
+        _truncatePlayerName(player.name, metrics.maxChars),
+        cardX + 10,
         rowY,
         metrics.textScale,
-        rowColor,
+        nameColor,
       );
-      drawRightAlignedText(
-        batch,
-        font,
-        '${'\u2665' * player.stocks} ${player.damage}%',
-        right,
-        rowY,
-        metrics.textScale,
-        rowColor,
-      );
+
+      final double barX = cardX + 10;
+      final double barY = rowY + 8;
+      final double barW = cardW - 20;
+      const double barH = 7;
+
+      final double healthValue = player.stocks <= 0
+          ? 0
+          : clampDouble(1 - (player.damage / 160), 0, 1);
+
+      final ui.Color healthColor = healthValue > 0.55
+          ? healthGood
+          : healthValue > 0.25
+              ? healthMid
+              : healthBad;
+
+      shapes.begin(ShapeType.filled);
+      shapes.setColor(healthBack);
+      shapes.rect(barX, barY, barW, barH);
+      shapes.setColor(healthColor);
+      shapes.rect(barX, barY, barW * healthValue, barH);
+      shapes.end();
+
+      final double stockDotStartX = cardX + cardW - 14;
+      final double stockY = cardY + 9;
+
+      shapes.begin(ShapeType.filled);
+      for (int i = 0; i < math.min(player.stocks, 3); i++) {
+        shapes.setColor(isLocalPlayer ? localPlayerColor : textColor);
+        shapes.rect(stockDotStartX - (i * 11), stockY, 6, 6);
+      }
+      shapes.end();
+
       rowY += metrics.rowHeight;
-      rank++;
     }
   }
 

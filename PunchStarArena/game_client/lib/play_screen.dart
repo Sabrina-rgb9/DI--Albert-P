@@ -276,50 +276,11 @@ class PlayScreen extends ScreenAdapter {
 
   void _renderLeaderboard(AppData appData) {
     final double screenWidth = Gdx.graphics.getWidth().toDouble();
-    final double screenHeight = Gdx.graphics.getHeight().toDouble();
-    final ShapeRenderer shapes = game.getShapeRenderer();
-    shapes.begin(ShapeType.filled);
-    shapes.setColor(panelFill);
-    shapes.rect(
-      screenWidth - leaderboardWidth,
-      0,
-      leaderboardWidth,
-      screenHeight,
-    );
-    shapes.end();
-
-    shapes.begin(ShapeType.line);
-    shapes.setColor(panelStroke);
-    shapes.rect(
-      screenWidth - leaderboardWidth,
-      0,
-      leaderboardWidth,
-      screenHeight,
-    );
-    shapes.end();
 
     final SpriteBatch batch = game.getBatch();
     final BitmapFont font = game.getFont();
-    batch.begin();
 
-    _drawLeftAlignedText(
-      batch,
-      font,
-      'Wrath in Japan',
-      screenWidth - leaderboardWidth + leaderboardPadding,
-      34,
-      1.45,
-      titleColor,
-    );
-    _drawLeftAlignedText(
-      batch,
-      font,
-      'Astronautas alive: ${appData.sortedPlayers.where((p) => p.stocks > 0).length}',
-      screenWidth - leaderboardWidth + leaderboardPadding,
-      64,
-      1.0,
-      dimTextColor,
-    );
+    batch.begin();
 
     PlayerListRenderer.render(
       batch: batch,
@@ -327,27 +288,15 @@ class PlayScreen extends ScreenAdapter {
       layout: layout,
       players: appData.sortedPlayers,
       localPlayerId: appData.playerId,
-      left: screenWidth - leaderboardWidth + leaderboardPadding,
-      right: screenWidth - leaderboardPadding,
-      startY: leaderboardStartY,
+      left: screenWidth - 235,
+      right: screenWidth - 18,
+      startY: 42,
       textColor: textColor,
       localPlayerColor: localPlayerColor,
       drawLeftAlignedText: _drawLeftAlignedText,
       drawRightAlignedText: _drawRightAlignedText,
       style: PlayerListRenderer.gameplayStyle,
     );
-
-    if (appData.sortedPlayers.isEmpty) {
-      _drawLeftAlignedText(
-        batch,
-        font,
-        'Waiting for players...',
-        screenWidth - leaderboardWidth + leaderboardPadding,
-        leaderboardStartY,
-        1.0,
-        dimTextColor,
-      );
-    }
 
     batch.end();
   }
